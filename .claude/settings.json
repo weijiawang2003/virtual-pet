@@ -1,0 +1,55 @@
+{
+  "enableAllProjectMcpServers": true,
+  "hooks": {
+    "PreToolUse": [
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c \"import json,sys; d=json.load(sys.stdin); c=d.get('tool_input',{}).get('command',''); bad=['rm -rf /','rm -rf ~','git push --force','DROP TABLE']; sys.exit(2 if any(b in c for b in bad) else 0)\""
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|MultiEdit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c \"import json,sys; d=json.load(sys.stdin); p=d.get('tool_input',{}).get('file_path',''); sys.exit(2 if any(x in p for x in ['.env','ios/Pods/','ios/build/','node_modules/']) else 0)\""
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|MultiEdit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c \"import json,sys,os; d=json.load(sys.stdin); p=d.get('tool_input',{}).get('file_path',''); native=['ios/','android/','app.json','app.config.','Info.plist','.xcprivacy']; \nif any(x in p for x in native): print('🚨 NATIVE CHANGE detected in '+p+' — announce to human in your next message.', file=sys.stderr); sys.exit(0)\""
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "matcher": "Edit|MultiEdit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'f=\"$CLAUDE_TOOL_INPUT_FILE_PATH\"; [ -f \"$f\" ] && npx --no-install prettier --write \"$f\" 2>/dev/null || true'"
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'echo \"{\\\"additionalContext\\\": \\\"Branch: $(git branch --show-current 2>/dev/null || echo none)\\\\nLast commit: $(git log -1 --oneline 2>/dev/null || echo none)\\\\nPhase docs: see docs/phases/\\\"}\"'"
+          }
+        ]
+      }
+    ]
+  }
+}

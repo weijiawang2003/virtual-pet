@@ -1,0 +1,36 @@
+# deps
+node_modules/
+.pnpm-store/
+
+# expo
+.expo/
+dist/
+web-build/
+*.orig.*
+
+# native
+ios/Pods/
+ios/build/
+ios/*.xcworkspace
+ios/*.xcodeproj
+android/
+
+# ide
+.vscode/
+.idea/
+*.swp
+.DS_Store
+
+# env
+.env
+.env.*
+!.env.example
+
+# logs / tmp
+*.log
+tmp/
+coverage/
+.maestro/tmp/
+
+# claude code local state (kept per-user)
+.claude/local/
