@@ -1,6 +1,7 @@
 import { applyDecay } from '../decay/decay';
 import { assertNever } from '../util/assert-never';
 import { clampStat } from '../util/clamp';
+import { advanceStage } from './stages';
 import type { Event, Pet, Stats } from './types';
 
 const INITIAL_STATS: Stats = { satiety: 70, energy: 70, happiness: 70 };
@@ -38,7 +39,7 @@ export function reducer(state: Pet, event: Event): Pet {
     case 'rest':
       return withStats(state, { energy: state.stats.energy + event.minutes });
     case 'tick':
-      return applyDecay(state, event.elapsedMs);
+      return advanceStage(applyDecay(state, event.elapsedMs));
     default:
       return assertNever(event);
   }

@@ -36,9 +36,25 @@ describe('reducer properties', () => {
     );
   });
 
-  it('stage is invariant under Phase 1+2 events (transitions arrive in Phase 3)', () => {
+  // Stage monotonicity lives in stages.properties.test.ts. Here we only verify
+  // that non-tick events leave the stage untouched.
+  it('feed/play/rest never change stage', () => {
+    const arbNonTick: fc.Arbitrary<Event> = fc.oneof(
+      fc.record({
+        type: fc.constant('feed' as const),
+        nutrition: fc.double({ min: -200, max: 200, noNaN: true }),
+      }),
+      fc.record({
+        type: fc.constant('play' as const),
+        minutes: fc.double({ min: -200, max: 200, noNaN: true }),
+      }),
+      fc.record({
+        type: fc.constant('rest' as const),
+        minutes: fc.double({ min: -200, max: 200, noNaN: true }),
+      }),
+    );
     fc.assert(
-      fc.property(fc.array(arbEvent, { maxLength: 50 }), (events) => {
+      fc.property(fc.array(arbNonTick, { maxLength: 50 }), (events) => {
         const end = events.reduce(reducer, createPet(0));
         expect(end.stage).toBe('egg');
       }),

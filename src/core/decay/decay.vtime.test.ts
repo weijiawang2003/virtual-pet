@@ -30,7 +30,7 @@ describe('48h virtual-clock snapshot', () => {
     expect(pet.stats.energy).toBeCloseTo(46, 6);
     expect(pet.stats.happiness).toBeCloseTo(34, 6);
     expect(pet.ageMs).toBe(48 * MS_PER_HOUR);
-    expect(pet.stage).toBe('egg'); // Phase 3 introduces transitions; not here.
+    expect(pet.stage).toBe('teen'); // 24h threshold crossed by Phase 3 transitions.
     expect(clock.now()).toBe(48 * MS_PER_HOUR);
   });
 
