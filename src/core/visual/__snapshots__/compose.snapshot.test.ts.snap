@@ -1,0 +1,73 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`compose — 6-fixture snapshot adult on Chinese New Year 1`] = `
+{
+  "accessory": "cny-jacket",
+  "animation": "bounce",
+  "background": "cny",
+  "bubble": "cny",
+  "hapticHint": null,
+  "mood": "happy",
+  "sprite": "adult-happy",
+}
+`;
+
+exports[`compose — 6-fixture snapshot adult on full moon with low HRV 1`] = `
+{
+  "accessory": null,
+  "animation": "full-moon-stare",
+  "background": "night",
+  "bubble": "fullmoon",
+  "hapticHint": "medium",
+  "mood": "cozy",
+  "sprite": "adult-cozy",
+}
+`;
+
+exports[`compose — 6-fixture snapshot baby hungry at daytime 1`] = `
+{
+  "accessory": null,
+  "animation": "idle",
+  "background": "sunny",
+  "bubble": "hungry",
+  "hapticHint": null,
+  "mood": "hungry",
+  "sprite": "baby-hungry",
+}
+`;
+
+exports[`compose — 6-fixture snapshot child on a rainy day 1`] = `
+{
+  "accessory": "raincoat",
+  "animation": "curious",
+  "background": "rain",
+  "bubble": "happy",
+  "hapticHint": null,
+  "mood": "cozy",
+  "sprite": "child-idle",
+}
+`;
+
+exports[`compose — 6-fixture snapshot egg just hatched 1`] = `
+{
+  "accessory": null,
+  "animation": "bounce",
+  "background": "sunny",
+  "bubble": "happy",
+  "hapticHint": null,
+  "mood": "happy",
+  "sprite": "egg",
+}
+`;
+
+exports[`compose — 6-fixture snapshot teen low mood at night 1`] = `
+{
+  "accessory": null,
+  "animation": "sleep",
+  "background": "night",
+  "bubble": "low",
+  "hapticHint": null,
+  "mood": "sleepy",
+  "sprite": "teen-sleepy",
+}
+`;

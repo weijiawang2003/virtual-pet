@@ -23,8 +23,8 @@ exports[`synthesizeContext — full snapshot produces the frozen Phase 9 shape f
     },
   },
   "lunar": {
-    "chineseLabel": "一九六九年十二月初四巳時",
-    "day": 4,
+    "chineseLabel": "一九六九年十二月初五子時",
+    "day": 5,
     "isLeapMonth": false,
     "month": 12,
     "solarTerm": null,
@@ -60,6 +60,7 @@ exports[`synthesizeContext — full snapshot produces the frozen Phase 9 shape f
     "dayOfWeek": 6,
     "hour": 23,
   },
+  "user": null,
   "weather": {
     "condition": "clear",
     "feelsLikeC": 14.7,

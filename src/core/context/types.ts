@@ -52,6 +52,10 @@ export interface LocationInputs {
   readonly events: readonly GeofenceEventView[];
 }
 
+export interface UserInfo {
+  readonly birthday?: { readonly month: number; readonly day: number };
+}
+
 export interface LifeContextInputs {
   readonly pet: Pet;
   readonly nowMs: number;
@@ -59,6 +63,7 @@ export interface LifeContextInputs {
   readonly health: HealthInputs;
   readonly location: LocationInputs;
   readonly permissions: PermissionsView;
+  readonly user?: UserInfo;
 }
 
 export interface HealthSummary {
@@ -88,4 +93,5 @@ export interface LifeContext {
   readonly weather: WeatherLite | null;
   readonly lunar: LunarInfo;
   readonly solar: SolarInfo | null;
+  readonly user: UserInfo | null;
 }

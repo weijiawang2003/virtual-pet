@@ -82,7 +82,7 @@ export function synthesizeContext(inputs: LifeContextInputs): LifeContext {
   const coord = inputs.location.current;
   const solar = coord !== null ? computeSolar(inputs.nowMs, coord.lat, coord.lon) : null;
   const weather = coord !== null ? mockWeather(coord.lat, coord.lon, inputs.nowMs) : null;
-  const lunar = computeLunar(inputs.nowMs);
+  const lunar = computeLunar(inputs.nowMs, inputs.tzOffsetMs);
   return Object.freeze({
     pet: inputs.pet,
     nowMs: inputs.nowMs,
@@ -94,5 +94,6 @@ export function synthesizeContext(inputs: LifeContextInputs): LifeContext {
     weather,
     lunar,
     solar,
+    user: inputs.user ?? null,
   });
 }
