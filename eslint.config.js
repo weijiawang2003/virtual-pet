@@ -11,9 +11,11 @@ const TS_FILES = ['**/*.ts', '**/*.tsx', '**/*.d.ts'];
 module.exports = defineConfig([
   expoConfig,
 
-  // CLAUDE.md §4 — architecture boundaries, applies to TS source only.
+  // CLAUDE.md §4 — architecture boundaries, applies to production TS source only.
+  // Tests intentionally wire multiple layers together, so *.test.ts files are exempt.
   {
     files: TS_FILES,
+    ignores: ['**/*.test.ts', '**/*.test.tsx', '**/*.vtime.test.ts'],
     rules: {
       'import/no-restricted-paths': [
         'error',

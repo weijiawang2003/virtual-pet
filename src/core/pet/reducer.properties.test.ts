@@ -15,6 +15,10 @@ const arbEvent: fc.Arbitrary<Event> = fc.oneof(
     type: fc.constant('rest' as const),
     minutes: fc.double({ min: -200, max: 200, noNaN: true }),
   }),
+  fc.record({
+    type: fc.constant('tick' as const),
+    elapsedMs: fc.double({ min: 0, max: 10 * 60 * 60 * 1000, noNaN: true }),
+  }),
 );
 
 describe('reducer properties', () => {
@@ -32,7 +36,7 @@ describe('reducer properties', () => {
     );
   });
 
-  it('stage is invariant under Phase 1 events', () => {
+  it('stage is invariant under Phase 1+2 events (transitions arrive in Phase 3)', () => {
     fc.assert(
       fc.property(fc.array(arbEvent, { maxLength: 50 }), (events) => {
         const end = events.reduce(reducer, createPet(0));

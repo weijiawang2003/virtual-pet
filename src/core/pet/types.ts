@@ -9,11 +9,12 @@ export interface Stats {
 export interface Pet {
   readonly stage: LifeStage;
   readonly stats: Stats;
-  readonly ageTicks: number;
+  readonly ageMs: number;
   readonly bornAt: number;
 }
 
 export type Event =
   | { readonly type: 'feed'; readonly nutrition: number }
   | { readonly type: 'play'; readonly minutes: number }
-  | { readonly type: 'rest'; readonly minutes: number };
+  | { readonly type: 'rest'; readonly minutes: number }
+  | { readonly type: 'tick'; readonly elapsedMs: number };

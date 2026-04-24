@@ -14,8 +14,8 @@ describe('createPet', () => {
     expect(createPet(42).bornAt).toBe(42);
   });
 
-  it('starts with ageTicks = 0', () => {
-    expect(createPet().ageTicks).toBe(0);
+  it('starts with ageMs = 0', () => {
+    expect(createPet().ageMs).toBe(0);
   });
 
   it('is pure — two calls with same arg are deeply equal', () => {
@@ -88,14 +88,23 @@ describe('reducer — exhaustiveness', () => {
   });
 });
 
-describe('reducer — Phase 1 invariants', () => {
+describe('reducer — tick (Phase 2)', () => {
+  it('delegates to applyDecay for tick events', () => {
+    const pet = createPet(0);
+    const next = reducer(pet, { type: 'tick', elapsedMs: 60 * 60 * 1000 });
+    expect(next.ageMs).toBe(60 * 60 * 1000);
+    expect(next.stats.satiety).toBeLessThan(pet.stats.satiety);
+  });
+});
+
+describe('reducer — Phase 1 invariants (non-tick events)', () => {
   const events: readonly Event[] = [
     { type: 'feed', nutrition: 15 },
     { type: 'play', minutes: 30 },
     { type: 'rest', minutes: 10 },
   ];
 
-  it('never changes stage in Phase 1', () => {
+  it('never changes stage for feed/play/rest', () => {
     const pet = createPet(0);
     const end = events.reduce(reducer, pet);
     expect(end.stage).toBe('egg');
@@ -107,9 +116,9 @@ describe('reducer — Phase 1 invariants', () => {
     expect(end.bornAt).toBe(42);
   });
 
-  it('never changes ageTicks in Phase 1', () => {
+  it('feed/play/rest never change ageMs', () => {
     const pet = createPet(0);
     const end = events.reduce(reducer, pet);
-    expect(end.ageTicks).toBe(0);
+    expect(end.ageMs).toBe(0);
   });
 });

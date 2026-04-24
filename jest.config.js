@@ -21,6 +21,13 @@ module.exports = {
       testMatch: ['<rootDir>/src/core/**/*.vtime.test.ts'],
       testPathIgnorePatterns: ['/node_modules/', '/_scaffold_tmp/'],
     },
+    {
+      displayName: 'providers',
+      preset: 'jest-expo',
+      testEnvironment: 'node',
+      testMatch: ['<rootDir>/src/providers/**/*.test.ts'],
+      testPathIgnorePatterns: ['/node_modules/', '/_scaffold_tmp/'],
+    },
   ],
   collectCoverageFrom: [
     'src/core/**/*.ts',

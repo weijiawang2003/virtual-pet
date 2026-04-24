@@ -1,15 +1,16 @@
+import { applyDecay } from '../decay/decay';
 import { assertNever } from '../util/assert-never';
 import { clampStat } from '../util/clamp';
 import type { Event, Pet, Stats } from './types';
 
 const INITIAL_STATS: Stats = { satiety: 70, energy: 70, happiness: 70 };
 
-// `now` is injectable so Phase 2's Clock-driven tests can pass a fixed timestamp.
+// `now` is injectable so Clock-driven tests can pass a fixed timestamp.
 export function createPet(now: number = Date.now()): Pet {
   return {
     stage: 'egg',
     stats: INITIAL_STATS,
-    ageTicks: 0,
+    ageMs: 0,
     bornAt: now,
   };
 }
@@ -36,6 +37,8 @@ export function reducer(state: Pet, event: Event): Pet {
       });
     case 'rest':
       return withStats(state, { energy: state.stats.energy + event.minutes });
+    case 'tick':
+      return applyDecay(state, event.elapsedMs);
     default:
       return assertNever(event);
   }
