@@ -28,6 +28,9 @@ importers:
       expo-system-ui:
         specifier: 6.0.9
         version: 6.0.9(expo@54.0.33)(react-native-web@0.21.0(react-dom@19.1.0(react@19.1.0))(react@19.1.0))(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.0)(react@19.1.0))
+      lunisolar:
+        specifier: 2.6.0
+        version: 2.6.0
       react:
         specifier: 19.1.0
         version: 19.1.0
@@ -55,6 +58,9 @@ importers:
       react-native-worklets:
         specifier: 0.5.1
         version: 0.5.1(@babel/core@7.29.0)(react-native@0.81.5(@babel/core@7.29.0)(@types/react@19.1.0)(react@19.1.0))(react@19.1.0)
+      suncalc:
+        specifier: 1.9.0
+        version: 1.9.0
     devDependencies:
       '@commitlint/cli':
         specifier: 19.6.1
@@ -71,6 +77,9 @@ importers:
       '@types/react':
         specifier: 19.1.0
         version: 19.1.0
+      '@types/suncalc':
+        specifier: 1.9.2
+        version: 1.9.2
       eslint:
         specifier: 9.25.0
         version: 9.25.0(jiti@2.6.1)
@@ -2172,6 +2181,12 @@ packages:
     resolution:
       {
         integrity: sha512-9aEbYZ3TbYMznPdcdr3SmIrLXwC/AKZXQeCf9Pgao5CKb8CyHuEX5jzWPTkvregvhRJHcpRO6BFoGW9ycaOkYw==,
+      }
+
+  '@types/suncalc@1.9.2':
+    resolution:
+      {
+        integrity: sha512-ATAGBHHfA1TlE2tjfidLyTcysjoT2JHHEAmWRULh73SU9UTn++j5fqHEW16X6Y/2Li87jEQXzgu4R/OOdlDqzw==,
       }
 
   '@types/tough-cookie@4.0.5':
@@ -6066,6 +6081,12 @@ packages:
         integrity: sha512-KpNARQA3Iwv+jTA0utUVVbrh+Jlrr1Fv0e56GGzAFOXN7dk/FviaDW8LHmK52DlcH4WP2n6gI8vN1aesBFgo9w==,
       }
 
+  lunisolar@2.6.0:
+    resolution:
+      {
+        integrity: sha512-Q2Ph0MtYDovbX5lvvo2FvM+bFzZVZaIb70q+FyQLheZ4xuL5tvCBP/uEU5KwG+vfo0ztzGPrlIitOcGhltfwvQ==,
+      }
+
   make-dir@4.0.0:
     resolution:
       {
@@ -8047,6 +8068,12 @@ packages:
       }
     engines: { node: '>=16 || 14 >=14.17' }
     hasBin: true
+
+  suncalc@1.9.0:
+    resolution:
+      {
+        integrity: sha512-vMJ8Byp1uIPoj+wb9c1AdK4jpkSKVAywgHX0lqY7zt6+EWRRC3Z+0Ucfjy/0yxTVO1hwwchZe4uoFNqrIC24+A==,
+      }
 
   supports-color@5.5.0:
     resolution:
@@ -10674,6 +10701,8 @@ snapshots:
       csstype: 3.2.3
 
   '@types/stack-utils@2.0.3': {}
+
+  '@types/suncalc@1.9.2': {}
 
   '@types/tough-cookie@4.0.5': {}
 
@@ -13417,6 +13446,8 @@ snapshots:
     dependencies:
       yallist: 3.1.1
 
+  lunisolar@2.6.0: {}
+
   make-dir@4.0.0:
     dependencies:
       semver: 7.7.4
@@ -14827,6 +14858,8 @@ snapshots:
       pirates: 4.0.7
       tinyglobby: 0.2.16
       ts-interface-checker: 0.1.13
+
+  suncalc@1.9.0: {}
 
   supports-color@5.5.0:
     dependencies:

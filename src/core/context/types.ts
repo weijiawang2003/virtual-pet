@@ -1,7 +1,9 @@
 import type { Pet } from '../pet/types';
 import type { PermissionsView } from '../nudge/types';
+import type { LunarInfo, SolarInfo, WeatherLite } from '../env/types';
 
 export type { PermissionsView };
+export type { LunarInfo, SolarInfo, WeatherLite } from '../env/types';
 
 // Core-local structural projections of provider types. These let core/context
 // consume provider outputs via TS structural compat without importing from
@@ -83,6 +85,7 @@ export interface LifeContext {
   readonly health: HealthSummary;
   readonly location: LocationSummary;
   readonly permissions: PermissionsView;
-  readonly weather: null;
-  readonly lunar: null;
+  readonly weather: WeatherLite | null;
+  readonly lunar: LunarInfo;
+  readonly solar: SolarInfo | null;
 }

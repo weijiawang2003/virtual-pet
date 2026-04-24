@@ -37,10 +37,34 @@ describe('synthesizeContext — empty inputs', () => {
     expect(ctx.location.activeRegions).toEqual([]);
   });
 
-  it('weather and lunar are null placeholders', () => {
+  it('weather and solar are null when location.current is null, lunar is always populated', () => {
     const ctx = synthesizeContext(baseInputs());
     expect(ctx.weather).toBeNull();
-    expect(ctx.lunar).toBeNull();
+    expect(ctx.solar).toBeNull();
+    expect(ctx.lunar).toEqual(
+      expect.objectContaining({
+        year: expect.any(Number),
+        month: expect.any(Number),
+        day: expect.any(Number),
+      }),
+    );
+  });
+
+  it('weather and solar are populated when location.current is present', () => {
+    const nowMs = Date.UTC(2026, 3, 24, 12, 0, 0);
+    const ctx = synthesizeContext(
+      baseInputs({
+        nowMs,
+        location: {
+          current: { lat: 31.23, lon: 121.47, timestampMs: nowMs },
+          events: [],
+        },
+      }),
+    );
+    expect(ctx.weather).not.toBeNull();
+    expect(ctx.solar).not.toBeNull();
+    expect(ctx.weather!.observedAt).toBe(nowMs);
+    expect(typeof ctx.solar!.moonPhase).toBe('number');
   });
 
   it('hourOfDay is in [0, 23]', () => {

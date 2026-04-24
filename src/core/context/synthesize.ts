@@ -1,3 +1,6 @@
+import { computeLunar } from '../env/lunar';
+import { computeSolar } from '../env/solar';
+import { mockWeather } from '../env/weather';
 import type {
   GeofenceEventView,
   HealthInputs,
@@ -76,6 +79,10 @@ function computeTimeOfDay(nowMs: number, tzOffsetMs: number): TimeOfDay {
 
 export function synthesizeContext(inputs: LifeContextInputs): LifeContext {
   const time = computeTimeOfDay(inputs.nowMs, inputs.tzOffsetMs);
+  const coord = inputs.location.current;
+  const solar = coord !== null ? computeSolar(inputs.nowMs, coord.lat, coord.lon) : null;
+  const weather = coord !== null ? mockWeather(coord.lat, coord.lon, inputs.nowMs) : null;
+  const lunar = computeLunar(inputs.nowMs);
   return Object.freeze({
     pet: inputs.pet,
     nowMs: inputs.nowMs,
@@ -84,7 +91,8 @@ export function synthesizeContext(inputs: LifeContextInputs): LifeContext {
     health: Object.freeze(summarizeHealth(inputs.health, inputs.nowMs)),
     location: summarizeLocation(inputs.location),
     permissions: inputs.permissions,
-    weather: null,
-    lunar: null,
+    weather,
+    lunar,
+    solar,
   });
 }

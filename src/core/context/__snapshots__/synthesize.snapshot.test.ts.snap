@@ -22,7 +22,14 @@ exports[`synthesizeContext — full snapshot produces the frozen Phase 9 shape f
       "timestampMs": 918000000,
     },
   },
-  "lunar": null,
+  "lunar": {
+    "chineseLabel": "一九六九年十二月初四巳時",
+    "day": 4,
+    "isLeapMonth": false,
+    "month": 12,
+    "solarTerm": null,
+    "year": 1969,
+  },
   "nowMs": 918000000,
   "permissions": {
     "calendar": "limited",
@@ -41,10 +48,24 @@ exports[`synthesizeContext — full snapshot produces the frozen Phase 9 shape f
       "satiety": 42,
     },
   },
+  "solar": {
+    "isDaylight": false,
+    "moonIllumination": 0.17920281654794723,
+    "moonPhase": 0.1391366377201786,
+    "solarNoonMs": 878586800,
+    "sunriseMs": 860095325,
+    "sunsetMs": 897078274,
+  },
   "timeOfDay": {
     "dayOfWeek": 6,
     "hour": 23,
   },
-  "weather": null,
+  "weather": {
+    "condition": "clear",
+    "feelsLikeC": 14.7,
+    "humidity": 0.5,
+    "observedAt": 918000000,
+    "tempC": 16.7,
+  },
 }
 `;
