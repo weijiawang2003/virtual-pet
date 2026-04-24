@@ -26,6 +26,7 @@ module.exports = {
     'src/core/**/*.ts',
     '!src/core/**/*.test.ts',
     '!src/core/**/*.vtime.test.ts',
+    '!src/core/**/types.ts',
   ],
   coverageThreshold: {
     global: {

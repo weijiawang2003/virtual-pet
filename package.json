@@ -10,9 +10,10 @@
     "lint": "eslint . --max-warnings=0",
     "lint:fix": "eslint . --fix",
     "test": "jest",
+    "test:coverage": "jest --coverage",
     "test:virtual-time": "jest --selectProjects virtual-time",
     "test:e2e:ios": "maestro test .maestro",
-    "check-all": "pnpm typecheck && pnpm lint && pnpm test -- --coverage",
+    "check-all": "pnpm typecheck && pnpm lint && pnpm test:coverage",
     "prepare": "husky"
   },
   "dependencies": {

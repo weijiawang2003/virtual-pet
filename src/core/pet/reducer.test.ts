@@ -1,13 +1,115 @@
-// Phase 0 intentional red-light test — primes Phase 1 TDD.
-// `./reducer` does not yet exist; this will fail Jest with "Cannot find module".
-// Phase 1's first job: create src/core/pet/reducer.ts exporting `createPet`.
-/* eslint-disable import/no-unresolved -- Phase 1 will add ./reducer */
-// @ts-expect-error Phase 1 will implement this module. Ref: docs/phases/01-state-machine.md
-import { createPet } from './reducer';
-/* eslint-enable import/no-unresolved */
+import { createPet, reducer } from './reducer';
+import type { Event } from './types';
 
-describe('pet reducer (Phase 1 stub)', () => {
-  it('createPet returns initial state with stage "egg"', () => {
+describe('createPet', () => {
+  it('starts in the egg stage', () => {
     expect(createPet()).toEqual(expect.objectContaining({ stage: 'egg' }));
+  });
+
+  it('starts with all stats at 70', () => {
+    expect(createPet().stats).toEqual({ satiety: 70, energy: 70, happiness: 70 });
+  });
+
+  it('records bornAt from the injected clock', () => {
+    expect(createPet(42).bornAt).toBe(42);
+  });
+
+  it('starts with ageTicks = 0', () => {
+    expect(createPet().ageTicks).toBe(0);
+  });
+
+  it('is pure — two calls with same arg are deeply equal', () => {
+    expect(createPet(100)).toEqual(createPet(100));
+  });
+});
+
+describe('reducer — feed', () => {
+  it('increases satiety by nutrition', () => {
+    const pet = createPet(0);
+    const next = reducer(pet, { type: 'feed', nutrition: 10 });
+    expect(next.stats.satiety).toBe(80);
+  });
+
+  it('clamps satiety at 100', () => {
+    const pet = createPet(0);
+    const next = reducer(pet, { type: 'feed', nutrition: 999 });
+    expect(next.stats.satiety).toBe(100);
+  });
+
+  it('does not mutate the input state', () => {
+    const pet = createPet(0);
+    const snapshot = JSON.stringify(pet);
+    reducer(pet, { type: 'feed', nutrition: 5 });
+    expect(JSON.stringify(pet)).toBe(snapshot);
+  });
+
+  it('leaves energy and happiness untouched', () => {
+    const pet = createPet(0);
+    const next = reducer(pet, { type: 'feed', nutrition: 10 });
+    expect(next.stats.energy).toBe(pet.stats.energy);
+    expect(next.stats.happiness).toBe(pet.stats.happiness);
+  });
+});
+
+describe('reducer — play', () => {
+  it('increases happiness and decreases energy', () => {
+    const pet = createPet(0);
+    const next = reducer(pet, { type: 'play', minutes: 10 });
+    expect(next.stats.happiness).toBe(80);
+    expect(next.stats.energy).toBe(65);
+  });
+
+  it('clamps both stats', () => {
+    const pet = createPet(0);
+    const happy = reducer(pet, { type: 'play', minutes: 1000 });
+    expect(happy.stats.happiness).toBe(100);
+    expect(happy.stats.energy).toBe(0);
+  });
+});
+
+describe('reducer — rest', () => {
+  it('increases energy by minutes', () => {
+    const pet = createPet(0);
+    const next = reducer(pet, { type: 'rest', minutes: 20 });
+    expect(next.stats.energy).toBe(90);
+  });
+
+  it('clamps energy at 100', () => {
+    const pet = createPet(0);
+    const next = reducer(pet, { type: 'rest', minutes: 500 });
+    expect(next.stats.energy).toBe(100);
+  });
+});
+
+describe('reducer — exhaustiveness', () => {
+  it('throws on an unknown event discriminant (defensive, unreachable via types)', () => {
+    const pet = createPet(0);
+    expect(() => reducer(pet, { type: 'explode' } as unknown as Event)).toThrow(/Unreachable/);
+  });
+});
+
+describe('reducer — Phase 1 invariants', () => {
+  const events: readonly Event[] = [
+    { type: 'feed', nutrition: 15 },
+    { type: 'play', minutes: 30 },
+    { type: 'rest', minutes: 10 },
+  ];
+
+  it('never changes stage in Phase 1', () => {
+    const pet = createPet(0);
+    const end = events.reduce(reducer, pet);
+    expect(end.stage).toBe('egg');
+  });
+
+  it('never changes bornAt', () => {
+    const pet = createPet(42);
+    const end = events.reduce(reducer, pet);
+    expect(end.bornAt).toBe(42);
+  });
+
+  it('never changes ageTicks in Phase 1', () => {
+    const pet = createPet(0);
+    const end = events.reduce(reducer, pet);
+    expect(end.ageTicks).toBe(0);
   });
 });
