@@ -12,7 +12,8 @@ export interface SelectOptions {
 // falls back to the pool's first entry for stable behavior.
 export function selectPhrase(key: BubbleKey, seed: number, opts: SelectOptions = {}): string {
   const all = POOL[key];
-  const fallback = all[0] ?? '';
+  // Pool completeness test guards MIN_COUNT ≥ 4, so all[0] is always defined.
+  const fallback = all[0]!;
   const recent = opts.recentlyUsed ?? [];
   const candidates = all.filter((p) => !recent.includes(p));
   // Spec: if every phrase is in recentlyUsed, return the pool's first entry
@@ -20,5 +21,7 @@ export function selectPhrase(key: BubbleKey, seed: number, opts: SelectOptions =
   if (candidates.length === 0) return fallback;
   const rng = mulberry32(seed);
   const idx = Math.floor(rng() * candidates.length) % candidates.length;
-  return candidates[idx] ?? fallback;
+  // idx is always in bounds (modulo length); non-null assertion avoids a dead
+  // ?? branch that coverage can never reach.
+  return candidates[idx]!;
 }
