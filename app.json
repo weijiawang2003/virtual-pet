@@ -1,0 +1,20 @@
+{
+  "expo": {
+    "name": "Virtual Pet",
+    "slug": "virtual-pet",
+    "version": "0.0.0",
+    "orientation": "portrait",
+    "scheme": "virtualpet",
+    "userInterfaceStyle": "automatic",
+    "newArchEnabled": true,
+    "platforms": ["ios"],
+    "ios": {
+      "bundleIdentifier": "com.placeholder.virtualpet",
+      "supportsTablet": false
+    },
+    "plugins": ["expo-router"],
+    "experiments": {
+      "typedRoutes": true
+    }
+  }
+}

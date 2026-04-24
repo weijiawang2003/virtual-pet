@@ -1,0 +1,62 @@
+{
+  "name": "virtual-pet",
+  "version": "0.0.0",
+  "private": true,
+  "main": "expo-router/entry",
+  "scripts": {
+    "start": "expo start",
+    "ios": "expo start --ios",
+    "typecheck": "tsc --noEmit",
+    "lint": "eslint . --max-warnings=0",
+    "lint:fix": "eslint . --fix",
+    "test": "jest",
+    "test:virtual-time": "jest --selectProjects virtual-time",
+    "test:e2e:ios": "maestro test .maestro",
+    "check-all": "pnpm typecheck && pnpm lint && pnpm test -- --coverage",
+    "prepare": "husky"
+  },
+  "dependencies": {
+    "expo": "54.0.33",
+    "expo-constants": "18.0.13",
+    "expo-linking": "8.0.11",
+    "expo-router": "6.0.23",
+    "expo-splash-screen": "31.0.13",
+    "expo-status-bar": "3.0.9",
+    "expo-system-ui": "6.0.9",
+    "react": "19.1.0",
+    "react-dom": "19.1.0",
+    "react-native": "0.81.5",
+    "react-native-gesture-handler": "2.28.0",
+    "react-native-reanimated": "4.1.1",
+    "react-native-safe-area-context": "5.6.0",
+    "react-native-screens": "4.16.0",
+    "react-native-web": "0.21.0",
+    "react-native-worklets": "0.5.1"
+  },
+  "devDependencies": {
+    "@commitlint/cli": "19.6.1",
+    "@commitlint/config-conventional": "19.6.0",
+    "@testing-library/react-native": "13.2.0",
+    "@types/jest": "29.5.14",
+    "@types/react": "19.1.0",
+    "eslint": "9.25.0",
+    "eslint-config-expo": "10.0.0",
+    "eslint-plugin-import": "2.31.0",
+    "fast-check": "3.23.1",
+    "husky": "9.1.7",
+    "jest": "29.7.0",
+    "jest-expo": "54.0.12",
+    "lint-staged": "15.2.11",
+    "prettier": "3.4.2",
+    "typescript": "5.9.2"
+  },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": [
+      "eslint --fix --max-warnings=0",
+      "prettier --write"
+    ],
+    "*.{json,md,yml,yaml}": [
+      "prettier --write"
+    ]
+  }
+}

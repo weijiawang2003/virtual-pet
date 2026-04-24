@@ -1,0 +1,4 @@
+appId: com.placeholder.virtualpet
+---
+- launchApp
+- assertVisible: 'Virtual Pet — Phase 0'
