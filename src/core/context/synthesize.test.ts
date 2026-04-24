@@ -89,6 +89,25 @@ describe('synthesizeContext — health aggregation', () => {
     expect(ctx.health.avgHrvLast24h).toBe(50);
   });
 
+  it('ignores HRV samples outside the 24h window (stale and future)', () => {
+    const nowMs = 10 * DAY;
+    const ctx = synthesizeContext(
+      baseInputs({
+        nowMs,
+        health: {
+          steps: [],
+          sleep: [],
+          hrv: [
+            { startAt: nowMs - 30 * H, endAt: nowMs - 29 * H, sdnnMs: 999 }, // stale (startAt < cutoff)
+            { startAt: nowMs - H, endAt: nowMs + H, sdnnMs: 999 }, // future (endAt > nowMs)
+            { startAt: nowMs - 6 * H, endAt: nowMs - 5 * H, sdnnMs: 42 }, // in-window
+          ],
+        },
+      }),
+    );
+    expect(ctx.health.avgHrvLast24h).toBe(42);
+  });
+
   it('picks the most recent sleep sample strictly before nowMs', () => {
     const nowMs = 10 * DAY;
     const ctx = synthesizeContext(
@@ -99,6 +118,25 @@ describe('synthesizeContext — health aggregation', () => {
           sleep: [
             { startAt: nowMs - 48 * H, endAt: nowMs - 40 * H, stage: 'deep' },
             { startAt: nowMs - 12 * H, endAt: nowMs - 6 * H, stage: 'rem' },
+          ],
+          hrv: [],
+        },
+      }),
+    );
+    expect(ctx.health.lastSleep?.stage).toBe('rem');
+  });
+
+  it('does not replace lastSleep when a later array entry is older', () => {
+    // Exercises the short-circuit `sl.endAt > lastSleep.endAt` false branch.
+    const nowMs = 10 * DAY;
+    const ctx = synthesizeContext(
+      baseInputs({
+        nowMs,
+        health: {
+          steps: [],
+          sleep: [
+            { startAt: nowMs - 10 * H, endAt: nowMs - 5 * H, stage: 'rem' }, // newer (set first)
+            { startAt: nowMs - 48 * H, endAt: nowMs - 40 * H, stage: 'deep' }, // older (should NOT replace)
           ],
           hrv: [],
         },
@@ -165,6 +203,23 @@ describe('synthesizeContext — location activeRegions', () => {
       }),
     );
     expect([...ctx.location.activeRegions]).toEqual(['b']);
+  });
+
+  it('keeps the latest-at-time event when events arrive out of chronological order', () => {
+    // Exercises the `e.at >= prev.at` false branch: later-in-array event
+    // arrives with an older timestamp and must NOT clobber the newer one.
+    const ctx = synthesizeContext(
+      baseInputs({
+        location: {
+          current: null,
+          events: [
+            { type: 'enter', regionId: 'home', at: 5000 }, // newer — becomes "prev"
+            { type: 'exit', regionId: 'home', at: 1000 }, // older — ignored (prev.at > e.at)
+          ],
+        },
+      }),
+    );
+    expect(ctx.location.activeRegions).toEqual(['home']);
   });
 
   it('sorts activeRegions alphabetically for stable output', () => {

@@ -125,6 +125,38 @@ describe('selectNudges — daily budget', () => {
   });
 });
 
+describe('selectNudges — rules without suggestedAction', () => {
+  it('omits suggestedAction on the emitted Nudge when rule omits it', () => {
+    const pet = { ...createPet(0), stats: { satiety: 10, energy: 70, happiness: 70 } };
+    const noActionRule = {
+      type: 'stat-threshold' as const,
+      kind: 'custom' as const,
+      stat: 'satiety' as const,
+      below: 20,
+      priority: 50,
+      message: 'your pet could use a snack',
+      requiresNotificationPermission: true,
+      // no suggestedAction — exercises the `undefined` branch.
+    };
+    const out = selectNudges(ctx({ pet }), [noActionRule], { dailyBudget: 3 });
+    expect(out).toHaveLength(1);
+    expect(out[0]!.suggestedAction).toBeUndefined();
+  });
+});
+
+describe('selectNudges — exhaustiveness', () => {
+  it('throws on an unknown rule discriminant (defensive, unreachable via types)', () => {
+    const pet = createPet(0);
+    expect(() =>
+      selectNudges(
+        ctx({ pet }),
+        [{ type: 'garbage' } as unknown as (typeof DEFAULT_NUDGE_RULES)[number]],
+        { dailyBudget: 3 },
+      ),
+    ).toThrow(/Unreachable/);
+  });
+});
+
 describe('selectNudges — output shape', () => {
   it('returns a frozen array', () => {
     const out = selectNudges(ctx({}), DEFAULT_NUDGE_RULES);
