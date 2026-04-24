@@ -1,0 +1,50 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`synthesizeContext — full snapshot produces the frozen Phase 9 shape for a realistic fixture 1`] = `
+{
+  "health": {
+    "avgHrvLast24h": 50,
+    "lastSleep": {
+      "endAt": 907200000,
+      "stage": "deep",
+      "startAt": 882000000,
+    },
+    "stepsLast24h": 2000,
+  },
+  "hourOfDay": 23,
+  "location": {
+    "activeRegions": [
+      "home",
+    ],
+    "current": {
+      "lat": 31.23,
+      "lon": 121.47,
+      "timestampMs": 918000000,
+    },
+  },
+  "lunar": null,
+  "nowMs": 918000000,
+  "permissions": {
+    "calendar": "limited",
+    "health": "granted",
+    "location": "granted",
+    "media": "denied",
+    "notifications": "granted",
+  },
+  "pet": {
+    "ageMs": 108000000,
+    "bornAt": 0,
+    "stage": "teen",
+    "stats": {
+      "energy": 58,
+      "happiness": 71,
+      "satiety": 42,
+    },
+  },
+  "timeOfDay": {
+    "dayOfWeek": 6,
+    "hour": 23,
+  },
+  "weather": null,
+}
+`;
