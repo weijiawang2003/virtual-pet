@@ -5,7 +5,7 @@ import { t } from '../../core/i18n/t';
 import { compose } from '../../core/visual/compose';
 import { ActionButton } from '../components/action-button';
 import { Bubble } from '../components/bubble';
-import { PetPlaceholder } from '../components/pet-placeholder';
+import { PetSprite } from '../components/pet-sprite';
 import { StageBadge } from '../components/stage-badge';
 import { StatRing } from '../components/stat-ring';
 import { useLifeContext } from '../hooks/use-life-context';
@@ -41,7 +41,7 @@ export function HomeScreen(): React.JSX.Element {
         </View>
 
         <View style={{ alignItems: 'center', justifyContent: 'center', paddingVertical: 32 }}>
-          <PetPlaceholder />
+          <PetSprite sprite={visual.sprite} mood={visual.mood} animation={visual.animation} />
           <View style={{ marginTop: 16, minHeight: 40, justifyContent: 'center' }}>
             <Bubble bubbleKey={visual.bubble} seedSalt={Math.floor(ctx.nowMs / 60_000)} />
           </View>

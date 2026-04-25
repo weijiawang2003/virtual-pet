@@ -119,31 +119,73 @@ exports[`HomeScreen layout matches the layout snapshot 1`] = `
           }
         >
           <View
-            accessibilityLabel="Pet placeholder"
+            accessibilityLabel="egg pet · cozy · cuddle"
             accessibilityRole="image"
             style={
               {
                 "alignItems": "center",
-                "backgroundColor": "#D6D3CC",
+                "backgroundColor": "#FFFFFF",
+                "borderColor": "#E2DFD8",
                 "borderRadius": 24,
+                "borderWidth": 1,
                 "height": 240,
                 "justifyContent": "center",
+                "overflow": "hidden",
                 "width": 240,
               }
             }
           >
-            <Text
+            <View
               style={
                 {
-                  "color": "#6B6B6B",
-                  "fontSize": 14,
-                  "fontWeight": "600",
-                  "letterSpacing": 1.4,
+                  "opacity": 1,
+                  "transform": [
+                    {
+                      "translateY": 0,
+                    },
+                    {
+                      "translateX": -3,
+                    },
+                    {
+                      "scale": 1,
+                    },
+                    {
+                      "rotate": "0deg",
+                    },
+                  ],
                 }
               }
             >
-              PET HERE
-            </Text>
+              <View
+                style={
+                  {
+                    "alignItems": "center",
+                    "justifyContent": "center",
+                  }
+                }
+              >
+                <Text
+                  style={
+                    {
+                      "fontSize": 120,
+                    }
+                  }
+                >
+                  🥚
+                </Text>
+                <Text
+                  style={
+                    {
+                      "fontSize": 28,
+                      "marginTop": 4,
+                      "opacity": 0.85,
+                    }
+                  }
+                >
+                  ☕
+                </Text>
+              </View>
+            </View>
           </View>
           <View
             style={

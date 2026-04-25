@@ -49,9 +49,11 @@ describe('HomeScreen layout', () => {
     expect(getByLabelText('Rest pet')).toBeTruthy();
   });
 
-  it('renders the pet placeholder', () => {
+  it('renders the pet sprite (egg stage at fresh launch)', () => {
     const { getByLabelText } = renderHome();
-    expect(getByLabelText('Pet placeholder')).toBeTruthy();
+    // a11y label = "<stage> pet · <mood> · <animation>". Fresh pet → egg.
+    // Mood/animation are derived from compose; we only assert the stage prefix.
+    expect(getByLabelText(/^egg pet /)).toBeTruthy();
   });
 
   it('renders the four stat rings with real values', () => {
