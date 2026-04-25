@@ -1,6 +1,7 @@
 import { render } from '@testing-library/react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
+import { RuntimeProvidersProvider } from '../../providers/runtime-providers-context';
 import { storage } from '../../store/mmkv';
 import { usePetSnapshotStore } from '../../store/pet-snapshot-store';
 import { useSettingsStore } from '../../store/settings-store';
@@ -19,9 +20,11 @@ const FRAME = {
 function renderHome(): ReturnType<typeof render> {
   return render(
     <SafeAreaProvider initialMetrics={FRAME}>
-      <ThemeProvider>
-        <HomeScreen />
-      </ThemeProvider>
+      <RuntimeProvidersProvider>
+        <ThemeProvider>
+          <HomeScreen />
+        </ThemeProvider>
+      </RuntimeProvidersProvider>
     </SafeAreaProvider>,
   );
 }

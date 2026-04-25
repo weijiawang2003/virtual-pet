@@ -106,7 +106,7 @@ exports[`HomeScreen layout matches the layout snapshot 1`] = `
               }
             }
           >
-            cozy
+            happy
           </Text>
         </View>
         <View
@@ -119,7 +119,7 @@ exports[`HomeScreen layout matches the layout snapshot 1`] = `
           }
         >
           <View
-            accessibilityLabel="egg pet · cozy · cuddle"
+            accessibilityLabel="egg pet · happy · bounce"
             accessibilityRole="image"
             style={
               {
@@ -144,7 +144,7 @@ exports[`HomeScreen layout matches the layout snapshot 1`] = `
                       "translateY": 0,
                     },
                     {
-                      "translateX": -3,
+                      "translateX": 0,
                     },
                     {
                       "scale": 1,
@@ -172,17 +172,6 @@ exports[`HomeScreen layout matches the layout snapshot 1`] = `
                   }
                 >
                   🥚
-                </Text>
-                <Text
-                  style={
-                    {
-                      "fontSize": 28,
-                      "marginTop": 4,
-                      "opacity": 0.85,
-                    }
-                  }
-                >
-                  ☕
                 </Text>
               </View>
             </View>
@@ -375,13 +364,13 @@ exports[`HomeScreen layout matches the layout snapshot 1`] = `
             </Text>
           </View>
           <View
-            accessibilityLabel="月 51 of 100"
+            accessibilityLabel="月 0 of 100"
             accessibilityRole="progressbar"
             accessibilityValue={
               {
                 "max": 100,
                 "min": 0,
-                "now": 51,
+                "now": 0,
               }
             }
             style={
@@ -406,7 +395,7 @@ exports[`HomeScreen layout matches the layout snapshot 1`] = `
                 }
               }
             >
-              51
+              0
             </Text>
             <Text
               style={

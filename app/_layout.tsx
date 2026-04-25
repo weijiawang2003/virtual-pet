@@ -4,6 +4,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { usePetTick } from '../src/ui/hooks/use-pet-tick';
+import { RuntimeProvidersProvider } from '../src/ui/providers/runtime-providers-context';
 import { ThemeProvider } from '../src/ui/theme/theme-provider';
 
 function PetTickDriver(): null {
@@ -15,11 +16,13 @@ export default function RootLayout(): React.JSX.Element {
   return (
     <GestureHandlerRootView style={{ flex: 1 }}>
       <SafeAreaProvider>
-        <ThemeProvider>
-          <PetTickDriver />
-          <Stack screenOptions={{ headerShown: false }} />
-          <StatusBar style="auto" />
-        </ThemeProvider>
+        <RuntimeProvidersProvider>
+          <ThemeProvider>
+            <PetTickDriver />
+            <Stack screenOptions={{ headerShown: false }} />
+            <StatusBar style="auto" />
+          </ThemeProvider>
+        </RuntimeProvidersProvider>
       </SafeAreaProvider>
     </GestureHandlerRootView>
   );
