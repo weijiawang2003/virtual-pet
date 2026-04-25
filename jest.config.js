@@ -13,6 +13,7 @@ module.exports = {
       preset: 'jest-expo',
       testMatch: ['<rootDir>/src/ui/**/*.test.{ts,tsx}', '<rootDir>/__tests__/**/*.test.{ts,tsx}'],
       testPathIgnorePatterns: ['/node_modules/', '/_scaffold_tmp/'],
+      setupFiles: ['<rootDir>/jest-setup.ts'],
     },
     {
       displayName: 'virtual-time',

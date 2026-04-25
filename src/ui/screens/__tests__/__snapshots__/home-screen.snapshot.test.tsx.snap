@@ -1,0 +1,590 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`HomeScreen layout matches the layout snapshot 1`] = `
+<RNCSafeAreaProvider
+  onInsetsChange={[Function]}
+  style={
+    [
+      {
+        "flex": 1,
+      },
+      undefined,
+    ]
+  }
+>
+  <RNCSafeAreaView
+    edges={
+      {
+        "bottom": "off",
+        "left": "additive",
+        "right": "additive",
+        "top": "additive",
+      }
+    }
+    style={
+      {
+        "backgroundColor": "#F7F6F3",
+        "flex": 1,
+      }
+    }
+  >
+    <RCTScrollView
+      contentContainerStyle={
+        {
+          "flexGrow": 1,
+          "paddingBottom": 24,
+          "paddingHorizontal": 20,
+        }
+      }
+    >
+      <View>
+        <View
+          style={
+            {
+              "paddingBottom": 8,
+              "paddingTop": 12,
+            }
+          }
+        >
+          <View
+            accessibilityLabel="Stage: egg"
+            accessibilityRole="text"
+            style={
+              {
+                "alignSelf": "flex-start",
+                "backgroundColor": "#EFEDE7",
+                "borderRadius": 999,
+                "paddingHorizontal": 14,
+                "paddingVertical": 6,
+              }
+            }
+          >
+            <Text
+              style={
+                {
+                  "color": "#1A1A1A",
+                  "fontSize": 13,
+                  "fontWeight": "600",
+                }
+              }
+            >
+              蛋
+            </Text>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "alignItems": "center",
+              "justifyContent": "center",
+              "paddingVertical": 32,
+            }
+          }
+        >
+          <View
+            accessibilityLabel="Pet placeholder"
+            accessibilityRole="image"
+            style={
+              {
+                "alignItems": "center",
+                "backgroundColor": "#D6D3CC",
+                "borderRadius": 24,
+                "height": 240,
+                "justifyContent": "center",
+                "width": 240,
+              }
+            }
+          >
+            <Text
+              style={
+                {
+                  "color": "#6B6B6B",
+                  "fontSize": 14,
+                  "fontWeight": "600",
+                  "letterSpacing": 1.4,
+                }
+              }
+            >
+              PET HERE
+            </Text>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "flexDirection": "row",
+              "justifyContent": "space-around",
+              "paddingBottom": 24,
+              "paddingTop": 8,
+            }
+          }
+        >
+          <View
+            accessibilityLabel="饱 70"
+            accessibilityRole="progressbar"
+            style={
+              {
+                "alignItems": "center",
+                "backgroundColor": "#FFFFFF",
+                "borderColor": "#E2DFD8",
+                "borderRadius": 30,
+                "borderWidth": 4,
+                "height": 60,
+                "justifyContent": "center",
+                "width": 60,
+              }
+            }
+          >
+            <Text
+              style={
+                {
+                  "color": "#1A1A1A",
+                  "fontSize": 12,
+                  "fontWeight": "700",
+                }
+              }
+            >
+              70
+            </Text>
+            <Text
+              style={
+                {
+                  "color": "#6B6B6B",
+                  "fontSize": 9,
+                  "letterSpacing": 0.5,
+                }
+              }
+            >
+              饱
+            </Text>
+          </View>
+          <View
+            accessibilityLabel="力 70"
+            accessibilityRole="progressbar"
+            style={
+              {
+                "alignItems": "center",
+                "backgroundColor": "#FFFFFF",
+                "borderColor": "#E2DFD8",
+                "borderRadius": 30,
+                "borderWidth": 4,
+                "height": 60,
+                "justifyContent": "center",
+                "width": 60,
+              }
+            }
+          >
+            <Text
+              style={
+                {
+                  "color": "#1A1A1A",
+                  "fontSize": 12,
+                  "fontWeight": "700",
+                }
+              }
+            >
+              70
+            </Text>
+            <Text
+              style={
+                {
+                  "color": "#6B6B6B",
+                  "fontSize": 9,
+                  "letterSpacing": 0.5,
+                }
+              }
+            >
+              力
+            </Text>
+          </View>
+          <View
+            accessibilityLabel="心 70"
+            accessibilityRole="progressbar"
+            style={
+              {
+                "alignItems": "center",
+                "backgroundColor": "#FFFFFF",
+                "borderColor": "#E2DFD8",
+                "borderRadius": 30,
+                "borderWidth": 4,
+                "height": 60,
+                "justifyContent": "center",
+                "width": 60,
+              }
+            }
+          >
+            <Text
+              style={
+                {
+                  "color": "#1A1A1A",
+                  "fontSize": 12,
+                  "fontWeight": "700",
+                }
+              }
+            >
+              70
+            </Text>
+            <Text
+              style={
+                {
+                  "color": "#6B6B6B",
+                  "fontSize": 9,
+                  "letterSpacing": 0.5,
+                }
+              }
+            >
+              心
+            </Text>
+          </View>
+          <View
+            accessibilityLabel="月 50"
+            accessibilityRole="progressbar"
+            style={
+              {
+                "alignItems": "center",
+                "backgroundColor": "#FFFFFF",
+                "borderColor": "#E2DFD8",
+                "borderRadius": 30,
+                "borderWidth": 4,
+                "height": 60,
+                "justifyContent": "center",
+                "width": 60,
+              }
+            }
+          >
+            <Text
+              style={
+                {
+                  "color": "#1A1A1A",
+                  "fontSize": 12,
+                  "fontWeight": "700",
+                }
+              }
+            >
+              50
+            </Text>
+            <Text
+              style={
+                {
+                  "color": "#6B6B6B",
+                  "fontSize": 9,
+                  "letterSpacing": 0.5,
+                }
+              }
+            >
+              月
+            </Text>
+          </View>
+        </View>
+        <View
+          style={
+            {
+              "flexDirection": "row",
+              "justifyContent": "space-around",
+              "paddingBottom": 16,
+              "paddingTop": 12,
+            }
+          }
+        >
+          <View
+            accessibilityLabel="Feed pet"
+            accessibilityRole="button"
+            accessibilityState={
+              {
+                "busy": undefined,
+                "checked": undefined,
+                "disabled": undefined,
+                "expanded": undefined,
+                "selected": undefined,
+              }
+            }
+            accessibilityValue={
+              {
+                "max": undefined,
+                "min": undefined,
+                "now": undefined,
+                "text": undefined,
+              }
+            }
+            accessible={true}
+            collapsable={false}
+            focusable={true}
+            hitSlop={8}
+            onBlur={[Function]}
+            onClick={[Function]}
+            onFocus={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              {
+                "alignItems": "center",
+                "backgroundColor": "#EFEDE7",
+                "borderRadius": 28,
+                "height": 56,
+                "justifyContent": "center",
+                "opacity": 1,
+                "width": 56,
+              }
+            }
+            testID="action-feed"
+          >
+            <View>
+              <Text
+                style={
+                  {
+                    "fontSize": 20,
+                    "textAlign": "center",
+                  }
+                }
+              >
+                🍙
+              </Text>
+              <Text
+                style={
+                  {
+                    "color": "#1A1A1A",
+                    "fontSize": 11,
+                    "fontWeight": "600",
+                    "textAlign": "center",
+                  }
+                }
+              >
+                喂食
+              </Text>
+            </View>
+          </View>
+          <View
+            accessibilityLabel="Play with pet"
+            accessibilityRole="button"
+            accessibilityState={
+              {
+                "busy": undefined,
+                "checked": undefined,
+                "disabled": undefined,
+                "expanded": undefined,
+                "selected": undefined,
+              }
+            }
+            accessibilityValue={
+              {
+                "max": undefined,
+                "min": undefined,
+                "now": undefined,
+                "text": undefined,
+              }
+            }
+            accessible={true}
+            collapsable={false}
+            focusable={true}
+            hitSlop={8}
+            onBlur={[Function]}
+            onClick={[Function]}
+            onFocus={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              {
+                "alignItems": "center",
+                "backgroundColor": "#EFEDE7",
+                "borderRadius": 28,
+                "height": 56,
+                "justifyContent": "center",
+                "opacity": 1,
+                "width": 56,
+              }
+            }
+            testID="action-play"
+          >
+            <View>
+              <Text
+                style={
+                  {
+                    "fontSize": 20,
+                    "textAlign": "center",
+                  }
+                }
+              >
+                🎈
+              </Text>
+              <Text
+                style={
+                  {
+                    "color": "#1A1A1A",
+                    "fontSize": 11,
+                    "fontWeight": "600",
+                    "textAlign": "center",
+                  }
+                }
+              >
+                玩耍
+              </Text>
+            </View>
+          </View>
+          <View
+            accessibilityLabel="Clean pet"
+            accessibilityRole="button"
+            accessibilityState={
+              {
+                "busy": undefined,
+                "checked": undefined,
+                "disabled": undefined,
+                "expanded": undefined,
+                "selected": undefined,
+              }
+            }
+            accessibilityValue={
+              {
+                "max": undefined,
+                "min": undefined,
+                "now": undefined,
+                "text": undefined,
+              }
+            }
+            accessible={true}
+            collapsable={false}
+            focusable={true}
+            hitSlop={8}
+            onBlur={[Function]}
+            onClick={[Function]}
+            onFocus={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              {
+                "alignItems": "center",
+                "backgroundColor": "#EFEDE7",
+                "borderRadius": 28,
+                "height": 56,
+                "justifyContent": "center",
+                "opacity": 1,
+                "width": 56,
+              }
+            }
+            testID="action-clean"
+          >
+            <View>
+              <Text
+                style={
+                  {
+                    "fontSize": 20,
+                    "textAlign": "center",
+                  }
+                }
+              >
+                🛁
+              </Text>
+              <Text
+                style={
+                  {
+                    "color": "#1A1A1A",
+                    "fontSize": 11,
+                    "fontWeight": "600",
+                    "textAlign": "center",
+                  }
+                }
+              >
+                清洁
+              </Text>
+            </View>
+          </View>
+          <View
+            accessibilityLabel="Rest pet"
+            accessibilityRole="button"
+            accessibilityState={
+              {
+                "busy": undefined,
+                "checked": undefined,
+                "disabled": undefined,
+                "expanded": undefined,
+                "selected": undefined,
+              }
+            }
+            accessibilityValue={
+              {
+                "max": undefined,
+                "min": undefined,
+                "now": undefined,
+                "text": undefined,
+              }
+            }
+            accessible={true}
+            collapsable={false}
+            focusable={true}
+            hitSlop={8}
+            onBlur={[Function]}
+            onClick={[Function]}
+            onFocus={[Function]}
+            onResponderGrant={[Function]}
+            onResponderMove={[Function]}
+            onResponderRelease={[Function]}
+            onResponderTerminate={[Function]}
+            onResponderTerminationRequest={[Function]}
+            onStartShouldSetResponder={[Function]}
+            style={
+              {
+                "alignItems": "center",
+                "backgroundColor": "#EFEDE7",
+                "borderRadius": 28,
+                "height": 56,
+                "justifyContent": "center",
+                "opacity": 1,
+                "width": 56,
+              }
+            }
+            testID="action-rest"
+          >
+            <View>
+              <Text
+                style={
+                  {
+                    "fontSize": 20,
+                    "textAlign": "center",
+                  }
+                }
+              >
+                🌙
+              </Text>
+              <Text
+                style={
+                  {
+                    "color": "#1A1A1A",
+                    "fontSize": 11,
+                    "fontWeight": "600",
+                    "textAlign": "center",
+                  }
+                }
+              >
+                休息
+              </Text>
+            </View>
+          </View>
+        </View>
+        <Text
+          style={
+            {
+              "color": "#6B6B6B",
+              "fontSize": 12,
+              "marginTop": 8,
+              "textAlign": "center",
+            }
+          }
+        >
+          Phase 14: UI foundation. Real artwork & wiring land in later phases.
+        </Text>
+      </View>
+    </RCTScrollView>
+  </RNCSafeAreaView>
+</RNCSafeAreaProvider>
+`;
