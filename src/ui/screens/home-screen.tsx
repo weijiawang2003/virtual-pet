@@ -1,3 +1,5 @@
+import { router } from 'expo-router';
+import { useEffect } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -10,13 +12,32 @@ import { StageBadge } from '../components/stage-badge';
 import { StatRing } from '../components/stat-ring';
 import { useLifeContext } from '../hooks/use-life-context';
 import { usePetActions } from '../hooks/use-pet-actions';
+import { useSettingsStore } from '../store/settings-store';
 import { useTheme } from '../theme/use-theme';
+
+const PERMISSION_PROMPT_DELAY_MS = 3000;
+const PERMISSION_HREF = '/notifications-permission' as Parameters<typeof router.push>[0];
 
 export function HomeScreen(): React.JSX.Element {
   const { palette, backdropTintFor } = useTheme();
   const ctx = useLifeContext();
   const visual = compose(ctx.pet, ctx);
   const actions = usePetActions();
+  const onboardingCompleted = useSettingsStore((s) => s.onboardingCompleted);
+  const notificationsAskedAt = useSettingsStore((s) => s.notificationsAskedAt);
+
+  // Trigger the notifications permission modal once, ~3s after the user
+  // first reaches Home post-onboarding. Skipped if they've already responded
+  // (askedAt set) or onboarding isn't complete.
+  useEffect(() => {
+    if (!onboardingCompleted || notificationsAskedAt !== null) return;
+    const id = setTimeout(() => {
+      router.push(PERMISSION_HREF);
+    }, PERMISSION_PROMPT_DELAY_MS);
+    return () => {
+      clearTimeout(id);
+    };
+  }, [onboardingCompleted, notificationsAskedAt]);
 
   const moonPct = Math.round((ctx.solar?.moonIllumination ?? 0) * 100);
   const tint = backdropTintFor(visual.background);

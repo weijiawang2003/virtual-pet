@@ -28,3 +28,50 @@ jest.mock('expo-router', () => ({
     back: jest.fn(),
   },
 }));
+
+// expo-notifications is pure-native; mock the API surface our code touches.
+// The fake NotificationProvider (in the providers tree under NODE_ENV=test)
+// replaces this for tests that exercise schedule/cancel — but the module
+// import itself still runs at file load time, so we need a non-throwing
+// shim here too.
+jest.mock('expo-notifications', () => ({
+  setNotificationHandler: jest.fn(),
+  scheduleNotificationAsync: jest.fn(() => Promise.resolve('fake-id')),
+  cancelScheduledNotificationAsync: jest.fn(() => Promise.resolve()),
+  cancelAllScheduledNotificationsAsync: jest.fn(() => Promise.resolve()),
+  getAllScheduledNotificationsAsync: jest.fn(() => Promise.resolve([])),
+  requestPermissionsAsync: jest.fn(() =>
+    Promise.resolve({
+      granted: true,
+      canAskAgain: true,
+      status: 'granted',
+      ios: { status: 2 /* AUTHORIZED */ },
+    }),
+  ),
+  getPermissionsAsync: jest.fn(() =>
+    Promise.resolve({
+      granted: true,
+      canAskAgain: true,
+      status: 'granted',
+      ios: { status: 2 },
+    }),
+  ),
+  addNotificationResponseReceivedListener: jest.fn(() => ({ remove: jest.fn() })),
+  removeNotificationSubscription: jest.fn(),
+  SchedulableTriggerInputTypes: {
+    DATE: 'date',
+    DAILY: 'daily',
+    WEEKLY: 'weekly',
+    MONTHLY: 'monthly',
+    YEARLY: 'yearly',
+    CALENDAR: 'calendar',
+    TIME_INTERVAL: 'timeInterval',
+  },
+  IosAuthorizationStatus: {
+    NOT_DETERMINED: 0,
+    DENIED: 1,
+    AUTHORIZED: 2,
+    PROVISIONAL: 3,
+    EPHEMERAL: 4,
+  },
+}));

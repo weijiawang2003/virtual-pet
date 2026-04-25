@@ -1,9 +1,11 @@
+import { useEffect, useState } from 'react';
 import { Pressable, ScrollView, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { t } from '../../core/i18n/t';
 import { SettingRow } from '../components/setting-row';
 import { useHaptics } from '../haptics/use-haptics';
+import { useRuntimeProviders } from '../providers/runtime-providers-context';
 import { usePetSnapshotStore } from '../store/pet-snapshot-store';
 import { DEMO_SPEED_OPTIONS, useSettingsStore, type DemoSpeed } from '../store/settings-store';
 import { useUserProfileStore } from '../store/user-profile-store';
@@ -85,10 +87,32 @@ export function SettingsScreen(): React.JSX.Element {
   const setSound = useSettingsStore((s) => s.setSound);
   const setTheme = useSettingsStore((s) => s.setTheme);
   const setDemoSpeed = useSettingsStore((s) => s.setDemoSpeed);
+  const notificationsEnabled = useSettingsStore((s) => s.notificationsEnabled);
+  const setNotificationsEnabled = useSettingsStore((s) => s.setNotificationsEnabled);
   const resetPet = usePetSnapshotStore((s) => s.reset);
   const setOnboardingCompleted = useSettingsStore((s) => s.setOnboardingCompleted);
+  const setNotificationsAskedAt = useSettingsStore((s) => s.setNotificationsAskedAt);
   const clearProfile = useUserProfileStore((s) => s.clear);
+  const { notifications } = useRuntimeProviders();
   const haptic = useHaptics();
+  const [pendingCount, setPendingCount] = useState<number>(0);
+
+  useEffect(() => {
+    let cancelled = false;
+    void notifications.listAll().then((list) => {
+      if (!cancelled) setPendingCount(list.length);
+    });
+    return () => {
+      cancelled = true;
+    };
+  }, [notifications, notificationsEnabled]);
+
+  const onNotificationsToggle = (next: boolean): void => {
+    setNotificationsEnabled(next);
+    if (!next) {
+      void notifications.cancelAll().then(() => setPendingCount(0));
+    }
+  };
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: palette.background }}>
@@ -118,6 +142,13 @@ export function SettingsScreen(): React.JSX.Element {
           value={haptics}
           onChange={setHaptics}
           testID="toggle-haptics"
+        />
+        <SettingRow
+          label="通知"
+          description={`系统中已 schedule ${pendingCount} 条`}
+          value={notificationsEnabled}
+          onChange={onNotificationsToggle}
+          testID="toggle-notifications"
         />
         <PillRow<ThemeMode>
           label="主题"
@@ -165,6 +196,8 @@ export function SettingsScreen(): React.JSX.Element {
             haptic.trigger('selection');
             clearProfile();
             setOnboardingCompleted(false);
+            setNotificationsAskedAt(null);
+            void notifications.cancelAll().then(() => setPendingCount(0));
           }}
           style={{
             marginTop: 12,

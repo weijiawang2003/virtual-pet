@@ -13,11 +13,15 @@ export interface SettingsState {
   readonly theme: ThemeMode;
   readonly demoSpeed: DemoSpeed;
   readonly onboardingCompleted: boolean;
+  readonly notificationsEnabled: boolean;
+  readonly notificationsAskedAt: number | null;
   setHaptics: (v: boolean) => void;
   setSound: (v: boolean) => void;
   setTheme: (m: ThemeMode) => void;
   setDemoSpeed: (s: DemoSpeed) => void;
   setOnboardingCompleted: (v: boolean) => void;
+  setNotificationsEnabled: (v: boolean) => void;
+  setNotificationsAskedAt: (t: number | null) => void;
   reset: () => void;
 }
 
@@ -27,6 +31,8 @@ const DEFAULT_STATE = {
   theme: 'auto' as ThemeMode,
   demoSpeed: 1 as DemoSpeed,
   onboardingCompleted: false,
+  notificationsEnabled: true,
+  notificationsAskedAt: null as number | null,
 } as const;
 
 export const useSettingsStore = create<SettingsState>()(
@@ -38,12 +44,14 @@ export const useSettingsStore = create<SettingsState>()(
       setTheme: (m) => set({ theme: m }),
       setDemoSpeed: (s) => set({ demoSpeed: s }),
       setOnboardingCompleted: (v) => set({ onboardingCompleted: v }),
+      setNotificationsEnabled: (v) => set({ notificationsEnabled: v }),
+      setNotificationsAskedAt: (t) => set({ notificationsAskedAt: t }),
       reset: () => set({ ...DEFAULT_STATE }),
     }),
     {
       name: 'settings',
       storage: createJSONStorage(() => mmkvStorage),
-      version: 2,
+      version: 3,
     },
   ),
 );
