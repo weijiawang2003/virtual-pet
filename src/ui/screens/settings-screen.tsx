@@ -6,6 +6,7 @@ import { SettingRow } from '../components/setting-row';
 import { useHaptics } from '../haptics/use-haptics';
 import { usePetSnapshotStore } from '../store/pet-snapshot-store';
 import { DEMO_SPEED_OPTIONS, useSettingsStore, type DemoSpeed } from '../store/settings-store';
+import { useUserProfileStore } from '../store/user-profile-store';
 import { useTheme } from '../theme/use-theme';
 import type { ThemeMode } from '../theme/types';
 
@@ -85,6 +86,8 @@ export function SettingsScreen(): React.JSX.Element {
   const setTheme = useSettingsStore((s) => s.setTheme);
   const setDemoSpeed = useSettingsStore((s) => s.setDemoSpeed);
   const resetPet = usePetSnapshotStore((s) => s.reset);
+  const setOnboardingCompleted = useSettingsStore((s) => s.setOnboardingCompleted);
+  const clearProfile = useUserProfileStore((s) => s.clear);
   const haptic = useHaptics();
 
   return (
@@ -153,6 +156,25 @@ export function SettingsScreen(): React.JSX.Element {
           <Text style={{ color: palette.text, fontSize: 15, fontWeight: '600' }}>
             {t('action.reset', 'zh-CN')}
           </Text>
+        </Pressable>
+
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="Reset onboarding"
+          onPress={() => {
+            haptic.trigger('selection');
+            clearProfile();
+            setOnboardingCompleted(false);
+          }}
+          style={{
+            marginTop: 12,
+            marginHorizontal: 16,
+            paddingVertical: 12,
+            alignItems: 'center',
+          }}
+          testID="reset-onboarding"
+        >
+          <Text style={{ color: palette.textMuted, fontSize: 13 }}>Replay onboarding (dev)</Text>
         </Pressable>
 
         <Pressable

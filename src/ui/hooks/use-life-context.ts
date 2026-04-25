@@ -3,6 +3,7 @@ import { useMemo } from 'react';
 import { synthesizeContext } from '../../core/context/synthesize';
 import type { LifeContext, LifeContextInputs } from '../../core/context/types';
 import { usePetSnapshotStore } from '../store/pet-snapshot-store';
+import { useUserProfileStore } from '../store/user-profile-store';
 import { useHealthSamples } from './use-health-samples';
 import { useLocationSnapshot } from './use-location-snapshot';
 import { useNowMs } from './use-now-ms';
@@ -14,14 +15,14 @@ function deviceTzOffsetMs(): number {
 }
 
 // Synthesizes a LifeContext on each tick. Inputs come from runtime providers
-// (Phase 17) — health/location/permissions are no longer hardcoded. Memoized
-// on the upstream tuple so downstream `compose` calls stay cheap.
+// (Phase 17) and the persisted user profile (Phase 18).
 export function useLifeContext(): LifeContext {
   const pet = usePetSnapshotStore((s) => s.pet);
   const nowMs = useNowMs(1000);
   const health = useHealthSamples(nowMs);
   const location = useLocationSnapshot();
   const permissions = usePermissionsSnapshot();
+  const birthday = useUserProfileStore((s) => s.birthday);
 
   return useMemo<LifeContext>(() => {
     const inputs: LifeContextInputs = {
@@ -31,7 +32,10 @@ export function useLifeContext(): LifeContext {
       health,
       location,
       permissions,
+      ...(birthday !== null
+        ? { user: { birthday: { month: birthday.month, day: birthday.day } } }
+        : {}),
     };
     return synthesizeContext(inputs);
-  }, [pet, nowMs, health, location, permissions]);
+  }, [pet, nowMs, health, location, permissions, birthday]);
 }
