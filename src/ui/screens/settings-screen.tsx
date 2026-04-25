@@ -5,18 +5,23 @@ import { t } from '../../core/i18n/t';
 import { SettingRow } from '../components/setting-row';
 import { useHaptics } from '../haptics/use-haptics';
 import { usePetSnapshotStore } from '../store/pet-snapshot-store';
-import { useSettingsStore } from '../store/settings-store';
+import { DEMO_SPEED_OPTIONS, useSettingsStore, type DemoSpeed } from '../store/settings-store';
 import { useTheme } from '../theme/use-theme';
 import type { ThemeMode } from '../theme/types';
 
 const THEME_MODES: readonly ThemeMode[] = ['auto', 'light', 'dark'];
 
-function ThemeModeRow(): React.JSX.Element {
+function PillRow<T>(props: {
+  label: string;
+  options: readonly T[];
+  current: T;
+  format: (v: T) => string;
+  onSelect: (v: T) => void;
+  testIdPrefix: string;
+}): React.JSX.Element {
+  const { label, options, current, format, onSelect, testIdPrefix } = props;
   const { palette } = useTheme();
-  const theme = useSettingsStore((s) => s.theme);
-  const setTheme = useSettingsStore((s) => s.setTheme);
   const haptics = useHaptics();
-
   return (
     <View
       style={{
@@ -27,29 +32,30 @@ function ThemeModeRow(): React.JSX.Element {
       }}
     >
       <Text style={{ color: palette.text, fontSize: 16, fontWeight: '500', marginBottom: 8 }}>
-        {t('setting.language', 'zh-CN').replace('语言', '主题')}
+        {label}
       </Text>
       <View style={{ flexDirection: 'row', gap: 8 }}>
-        {THEME_MODES.map((mode) => {
-          const active = mode === theme;
+        {options.map((opt) => {
+          const active = opt === current;
+          const formatted = format(opt);
           return (
             <Pressable
-              key={mode}
+              key={formatted}
               accessibilityRole="button"
-              accessibilityLabel={`Set theme ${mode}`}
+              accessibilityLabel={`${label} ${formatted}`}
               accessibilityState={{ selected: active }}
+              hitSlop={6}
               onPress={() => {
                 haptics.trigger('selection');
-                setTheme(mode);
+                onSelect(opt);
               }}
-              hitSlop={6}
               style={{
                 paddingHorizontal: 14,
                 paddingVertical: 8,
                 borderRadius: 999,
                 backgroundColor: active ? palette.accent : palette.surfaceMuted,
               }}
-              testID={`theme-${mode}`}
+              testID={`${testIdPrefix}-${formatted}`}
             >
               <Text
                 style={{
@@ -58,7 +64,7 @@ function ThemeModeRow(): React.JSX.Element {
                   fontWeight: '600',
                 }}
               >
-                {mode}
+                {formatted}
               </Text>
             </Pressable>
           );
@@ -72,9 +78,13 @@ export function SettingsScreen(): React.JSX.Element {
   const { palette } = useTheme();
   const haptics = useSettingsStore((s) => s.haptics);
   const sound = useSettingsStore((s) => s.sound);
+  const theme = useSettingsStore((s) => s.theme);
+  const demoSpeed = useSettingsStore((s) => s.demoSpeed);
   const setHaptics = useSettingsStore((s) => s.setHaptics);
   const setSound = useSettingsStore((s) => s.setSound);
-  const clearPetSnapshot = usePetSnapshotStore((s) => s.clear);
+  const setTheme = useSettingsStore((s) => s.setTheme);
+  const setDemoSpeed = useSettingsStore((s) => s.setDemoSpeed);
+  const resetPet = usePetSnapshotStore((s) => s.reset);
   const haptic = useHaptics();
 
   return (
@@ -100,20 +110,35 @@ export function SettingsScreen(): React.JSX.Element {
           testID="toggle-sound"
         />
         <SettingRow
-          label={t('setting.notifications', 'zh-CN').replace('通知', '触感')}
+          label="触感"
           description="按键时震动反馈"
           value={haptics}
           onChange={setHaptics}
           testID="toggle-haptics"
         />
-        <ThemeModeRow />
+        <PillRow<ThemeMode>
+          label="主题"
+          options={THEME_MODES}
+          current={theme}
+          format={(v) => v}
+          onSelect={setTheme}
+          testIdPrefix="theme"
+        />
+        <PillRow<DemoSpeed>
+          label="演示速度"
+          options={DEMO_SPEED_OPTIONS}
+          current={demoSpeed}
+          format={(v) => `×${v}`}
+          onSelect={setDemoSpeed}
+          testIdPrefix="speed"
+        />
 
         <Pressable
           accessibilityRole="button"
           accessibilityLabel="Reset pet"
           onPress={() => {
             haptic.trigger('medium');
-            clearPetSnapshot();
+            resetPet();
           }}
           style={{
             marginTop: 24,

@@ -28,6 +28,24 @@ exports[`HomeScreen layout matches the layout snapshot 1`] = `
       }
     }
   >
+    <View
+      accessibilityElementsHidden={true}
+      importantForAccessibility="no-hide-descendants"
+      style={
+        [
+          {
+            "bottom": 0,
+            "left": 0,
+            "position": "absolute",
+            "right": 0,
+            "top": 0,
+          },
+          {
+            "backgroundColor": "rgba(30, 40, 70, 0.22)",
+          },
+        ]
+      }
+    />
     <RCTScrollView
       contentContainerStyle={
         {
@@ -41,6 +59,8 @@ exports[`HomeScreen layout matches the layout snapshot 1`] = `
         <View
           style={
             {
+              "alignItems": "center",
+              "flexDirection": "row",
               "paddingBottom": 8,
               "paddingTop": 12,
             }
@@ -71,6 +91,23 @@ exports[`HomeScreen layout matches the layout snapshot 1`] = `
               蛋
             </Text>
           </View>
+          <View
+            style={
+              {
+                "flex": 1,
+              }
+            }
+          />
+          <Text
+            style={
+              {
+                "color": "#6B6B6B",
+                "fontSize": 12,
+              }
+            }
+          >
+            cozy
+          </Text>
         </View>
         <View
           style={
@@ -108,6 +145,44 @@ exports[`HomeScreen layout matches the layout snapshot 1`] = `
               PET HERE
             </Text>
           </View>
+          <View
+            style={
+              {
+                "justifyContent": "center",
+                "marginTop": 16,
+                "minHeight": 40,
+              }
+            }
+          >
+            <View
+              accessibilityLabel="Bubble: 阳光真好"
+              accessibilityRole="text"
+              style={
+                {
+                  "alignSelf": "center",
+                  "backgroundColor": "#FFFFFF",
+                  "borderColor": "#E2DFD8",
+                  "borderRadius": 18,
+                  "borderWidth": 1,
+                  "maxWidth": 280,
+                  "paddingHorizontal": 14,
+                  "paddingVertical": 10,
+                }
+              }
+            >
+              <Text
+                style={
+                  {
+                    "color": "#1A1A1A",
+                    "fontSize": 14,
+                    "lineHeight": 20,
+                  }
+                }
+              >
+                阳光真好
+              </Text>
+            </View>
+          </View>
         </View>
         <View
           style={
@@ -120,8 +195,15 @@ exports[`HomeScreen layout matches the layout snapshot 1`] = `
           }
         >
           <View
-            accessibilityLabel="饱 70"
+            accessibilityLabel="饱 70 of 100"
             accessibilityRole="progressbar"
+            accessibilityValue={
+              {
+                "max": 100,
+                "min": 0,
+                "now": 70,
+              }
+            }
             style={
               {
                 "alignItems": "center",
@@ -159,8 +241,15 @@ exports[`HomeScreen layout matches the layout snapshot 1`] = `
             </Text>
           </View>
           <View
-            accessibilityLabel="力 70"
+            accessibilityLabel="力 70 of 100"
             accessibilityRole="progressbar"
+            accessibilityValue={
+              {
+                "max": 100,
+                "min": 0,
+                "now": 70,
+              }
+            }
             style={
               {
                 "alignItems": "center",
@@ -198,8 +287,15 @@ exports[`HomeScreen layout matches the layout snapshot 1`] = `
             </Text>
           </View>
           <View
-            accessibilityLabel="心 70"
+            accessibilityLabel="心 70 of 100"
             accessibilityRole="progressbar"
+            accessibilityValue={
+              {
+                "max": 100,
+                "min": 0,
+                "now": 70,
+              }
+            }
             style={
               {
                 "alignItems": "center",
@@ -237,8 +333,15 @@ exports[`HomeScreen layout matches the layout snapshot 1`] = `
             </Text>
           </View>
           <View
-            accessibilityLabel="月 50"
+            accessibilityLabel="月 51 of 100"
             accessibilityRole="progressbar"
+            accessibilityValue={
+              {
+                "max": 100,
+                "min": 0,
+                "now": 51,
+              }
+            }
             style={
               {
                 "alignItems": "center",
@@ -261,7 +364,7 @@ exports[`HomeScreen layout matches the layout snapshot 1`] = `
                 }
               }
             >
-              50
+              51
             </Text>
             <Text
               style={
@@ -581,7 +684,9 @@ exports[`HomeScreen layout matches the layout snapshot 1`] = `
             }
           }
         >
-          Phase 14: UI foundation. Real artwork & wiring land in later phases.
+          night
+           · 
+          二〇二六年三月初八丑時
         </Text>
       </View>
     </RCTScrollView>
