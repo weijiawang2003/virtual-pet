@@ -12,6 +12,7 @@
     "test": "jest",
     "test:coverage": "jest --coverage",
     "test:virtual-time": "jest --selectProjects virtual-time",
+    "pet:demo": "tsx scripts/terminal-pet.ts",
     "test:e2e:ios": "maestro test .maestro",
     "check-all": "pnpm typecheck && pnpm lint && pnpm test:coverage",
     "prepare": "husky"
@@ -52,6 +53,7 @@
     "jest-expo": "54.0.12",
     "lint-staged": "15.2.11",
     "prettier": "3.4.2",
+    "tsx": "4.21.0",
     "typescript": "5.9.2"
   },
   "lint-staged": {
