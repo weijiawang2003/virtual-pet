@@ -9,17 +9,11 @@
     "newArchEnabled": true,
     "platforms": ["ios"],
     "assetBundlePatterns": ["**/*"],
-    "icon": "./assets/icon-placeholder.png",
-    "splash": {
-      "image": "./assets/splash-placeholder.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#F7F6F3"
-    },
     "ios": {
       "bundleIdentifier": "com.placeholder.virtualpet",
       "supportsTablet": false
     },
-    "plugins": ["expo-router", "expo-audio"],
+    "plugins": ["expo-router", "expo-audio", "expo-asset"],
     "experiments": {
       "typedRoutes": true
     },
