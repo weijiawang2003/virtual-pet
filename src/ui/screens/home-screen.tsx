@@ -1,18 +1,21 @@
 import { router } from 'expo-router';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { t } from '../../core/i18n/t';
 import { compose } from '../../core/visual/compose';
+import { VITALITY_COSTS } from '../../core/vitality/costs';
 import { ActionButton } from '../components/action-button';
 import { Bubble } from '../components/bubble';
 import { PetSprite } from '../components/pet-sprite';
 import { StageBadge } from '../components/stage-badge';
 import { StatRing } from '../components/stat-ring';
+import { VitalityBar } from '../components/vitality-bar';
 import { useLifeContext } from '../hooks/use-life-context';
 import { usePetActions } from '../hooks/use-pet-actions';
 import { useSettingsStore } from '../store/settings-store';
+import { useVitalityStore } from '../store/vitality-store';
 import { useTheme } from '../theme/use-theme';
 
 const PERMISSION_PROMPT_DELAY_MS = 3000;
@@ -25,9 +28,22 @@ export function HomeScreen(): React.JSX.Element {
   const ctx = useLifeContext();
   const visual = compose(ctx.pet, ctx);
   const actions = usePetActions();
+  const vitality = useVitalityStore((s) => s.vitality);
   const onboardingCompleted = useSettingsStore((s) => s.onboardingCompleted);
   const notificationsAskedAt = useSettingsStore((s) => s.notificationsAskedAt);
   const signalsOnboardingShownAt = useSettingsStore((s) => s.signalsOnboardingShownAt);
+  const [tooltip, setTooltip] = useState<string | null>(null);
+
+  const insufficientTooltip =
+    (cost: number): (() => void) =>
+    () => {
+      setTooltip(`需要 ${cost} 点元气,运动一下 / 睡个好觉就回来了`);
+      setTimeout(() => setTooltip(null), 2400);
+    };
+
+  const canFeed = vitality.current >= VITALITY_COSTS.feed;
+  const canPlay = vitality.current >= VITALITY_COSTS.play;
+  const canClean = vitality.current >= VITALITY_COSTS.clean;
 
   // Trigger the notifications permission modal once, ~3s after the user
   // first reaches Home post-onboarding. Skipped if they've already responded
@@ -77,6 +93,8 @@ export function HomeScreen(): React.JSX.Element {
           <Text style={{ color: palette.textMuted, fontSize: 12 }}>{visual.mood}</Text>
         </View>
 
+        <VitalityBar current={vitality.current} cap={vitality.cap} testID="vitality-bar" />
+
         <View style={{ alignItems: 'center', justifyContent: 'center', paddingVertical: 32 }}>
           <PetSprite sprite={visual.sprite} mood={visual.mood} animation={visual.animation} />
           <View style={{ marginTop: 16, minHeight: 40, justifyContent: 'center' }}>
@@ -111,21 +129,27 @@ export function HomeScreen(): React.JSX.Element {
             accessibilityLabel="Feed pet"
             icon="🍙"
             onPress={actions.feed}
+            disabled={!canFeed}
             testID="action-feed"
+            {...(!canFeed && { onLongPress: insufficientTooltip(VITALITY_COSTS.feed) })}
           />
           <ActionButton
             label={t('action.play', 'zh-CN')}
             accessibilityLabel="Play with pet"
             icon="🎈"
             onPress={actions.play}
+            disabled={!canPlay}
             testID="action-play"
+            {...(!canPlay && { onLongPress: insufficientTooltip(VITALITY_COSTS.play) })}
           />
           <ActionButton
             label={t('action.clean', 'zh-CN')}
             accessibilityLabel="Clean pet"
             icon="🛁"
             onPress={actions.clean}
+            disabled={!canClean}
             testID="action-clean"
+            {...(!canClean && { onLongPress: insufficientTooltip(VITALITY_COSTS.clean) })}
           />
           <ActionButton
             label={t('action.rest', 'zh-CN')}
@@ -135,6 +159,20 @@ export function HomeScreen(): React.JSX.Element {
             testID="action-rest"
           />
         </View>
+        {tooltip !== null && (
+          <Text
+            style={{
+              color: palette.textMuted,
+              fontSize: 12,
+              textAlign: 'center',
+              marginTop: -8,
+              marginBottom: 8,
+            }}
+            testID="vitality-tooltip"
+          >
+            {tooltip}
+          </Text>
+        )}
 
         <Text style={{ color: palette.textMuted, fontSize: 12, textAlign: 'center', marginTop: 8 }}>
           {visual.background} · {ctx.lunar.chineseLabel}

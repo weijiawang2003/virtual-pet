@@ -10,25 +10,36 @@ interface ActionButtonProps {
   readonly accessibilityLabel: string;
   readonly icon?: string;
   readonly onPress?: () => void;
+  readonly onLongPress?: () => void;
+  readonly disabled?: boolean;
   readonly testID?: string;
 }
 
 export function ActionButton(props: ActionButtonProps): React.JSX.Element {
-  const { label, accessibilityLabel, icon, onPress, testID } = props;
+  const { label, accessibilityLabel, icon, onPress, onLongPress, disabled = false, testID } = props;
   const { palette } = useTheme();
   const haptics = useHaptics();
 
   const handlePress = (): void => {
+    if (disabled) return;
     haptics.trigger('light');
     onPress?.();
+  };
+
+  const handleLongPress = (): void => {
+    if (onLongPress === undefined) return;
+    haptics.trigger('selection');
+    onLongPress();
   };
 
   return (
     <Pressable
       accessibilityRole="button"
       accessibilityLabel={accessibilityLabel}
+      accessibilityState={{ disabled }}
       hitSlop={8}
       onPress={handlePress}
+      onLongPress={handleLongPress}
       testID={testID}
       style={({ pressed }) => ({
         width: SIZE,
@@ -37,7 +48,7 @@ export function ActionButton(props: ActionButtonProps): React.JSX.Element {
         backgroundColor: palette.surfaceMuted,
         alignItems: 'center',
         justifyContent: 'center',
-        opacity: pressed ? 0.7 : 1,
+        opacity: disabled ? 0.4 : pressed ? 0.7 : 1,
       })}
     >
       <View>

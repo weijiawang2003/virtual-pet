@@ -10,6 +10,7 @@ import { useSignalBus } from '../providers/signal-bus-context';
 import { usePetSnapshotStore } from '../store/pet-snapshot-store';
 import { DEMO_SPEED_OPTIONS, useSettingsStore, type DemoSpeed } from '../store/settings-store';
 import { useUserProfileStore } from '../store/user-profile-store';
+import { useVitalityStore } from '../store/vitality-store';
 import { useTheme } from '../theme/use-theme';
 import type { ThemeMode } from '../theme/types';
 
@@ -106,6 +107,9 @@ export function SettingsScreen(): React.JSX.Element {
   const haptic = useHaptics();
   const [pendingCount, setPendingCount] = useState<number>(0);
   const recentSignals = bus.recent();
+  const vitality = useVitalityStore((s) => s.vitality);
+  const recoverVitality = useVitalityStore((s) => s.recover);
+  const resetVitality = useVitalityStore((s) => s.reset);
 
   useEffect(() => {
     let cancelled = false;
@@ -231,6 +235,70 @@ export function SettingsScreen(): React.JSX.Element {
           onSelect={setDemoSpeed}
           testIdPrefix="speed"
         />
+
+        {__DEV__ && (
+          <View style={{ marginTop: 16 }}>
+            <Text
+              style={{
+                color: palette.textMuted,
+                fontSize: 12,
+                paddingHorizontal: 16,
+                paddingTop: 8,
+                paddingBottom: 4,
+                textTransform: 'uppercase',
+                letterSpacing: 1,
+              }}
+            >
+              Dev Tools
+            </Text>
+            <Text
+              style={{
+                color: palette.textMuted,
+                fontSize: 12,
+                paddingHorizontal: 16,
+                paddingBottom: 4,
+              }}
+            >
+              元气 {Math.round(vitality.current)} / {vitality.cap}
+            </Text>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Force +50 Vitality"
+              onPress={() => {
+                haptic.trigger('selection');
+                recoverVitality(50, 'manual');
+              }}
+              style={{
+                marginHorizontal: 16,
+                marginTop: 4,
+                paddingVertical: 10,
+                backgroundColor: palette.surfaceMuted,
+                borderRadius: 10,
+                alignItems: 'center',
+              }}
+              testID="dev-force-vitality"
+            >
+              <Text style={{ color: palette.text, fontSize: 13 }}>+50 元气 (dev)</Text>
+            </Pressable>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Reset Vitality"
+              onPress={() => {
+                haptic.trigger('selection');
+                resetVitality();
+              }}
+              style={{
+                marginHorizontal: 16,
+                marginTop: 6,
+                paddingVertical: 10,
+                alignItems: 'center',
+              }}
+              testID="dev-reset-vitality"
+            >
+              <Text style={{ color: palette.textMuted, fontSize: 12 }}>重置元气 (dev)</Text>
+            </Pressable>
+          </View>
+        )}
 
         <Pressable
           accessibilityRole="button"

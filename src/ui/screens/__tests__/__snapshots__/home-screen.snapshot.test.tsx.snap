@@ -110,6 +110,78 @@ exports[`HomeScreen layout matches the layout snapshot 1`] = `
           </Text>
         </View>
         <View
+          accessibilityLabel="Vitality 100 of 100"
+          accessibilityRole="progressbar"
+          accessibilityValue={
+            {
+              "max": 100,
+              "min": 0,
+              "now": 100,
+            }
+          }
+          style={
+            {
+              "paddingHorizontal": 4,
+            }
+          }
+          testID="vitality-bar"
+        >
+          <View
+            style={
+              {
+                "alignItems": "center",
+                "flexDirection": "row",
+                "justifyContent": "space-between",
+                "marginBottom": 4,
+              }
+            }
+          >
+            <Text
+              style={
+                {
+                  "color": "#6B6B6B",
+                  "fontSize": 11,
+                  "letterSpacing": 1,
+                }
+              }
+            >
+              元气
+            </Text>
+            <Text
+              style={
+                {
+                  "color": "#6B6B6B",
+                  "fontSize": 11,
+                }
+              }
+            >
+              100
+               / 
+              100
+            </Text>
+          </View>
+          <View
+            style={
+              {
+                "backgroundColor": "#EFEDE7",
+                "borderRadius": 3,
+                "height": 6,
+                "overflow": "hidden",
+              }
+            }
+          >
+            <View
+              style={
+                {
+                  "backgroundColor": "#FF7A45",
+                  "height": "100%",
+                  "width": "100%",
+                }
+              }
+            />
+          </View>
+        </View>
+        <View
           style={
             {
               "alignItems": "center",
@@ -395,7 +467,7 @@ exports[`HomeScreen layout matches the layout snapshot 1`] = `
               {
                 "busy": undefined,
                 "checked": undefined,
-                "disabled": undefined,
+                "disabled": false,
                 "expanded": undefined,
                 "selected": undefined,
               }
@@ -466,7 +538,7 @@ exports[`HomeScreen layout matches the layout snapshot 1`] = `
               {
                 "busy": undefined,
                 "checked": undefined,
-                "disabled": undefined,
+                "disabled": false,
                 "expanded": undefined,
                 "selected": undefined,
               }
@@ -537,7 +609,7 @@ exports[`HomeScreen layout matches the layout snapshot 1`] = `
               {
                 "busy": undefined,
                 "checked": undefined,
-                "disabled": undefined,
+                "disabled": false,
                 "expanded": undefined,
                 "selected": undefined,
               }
@@ -608,7 +680,7 @@ exports[`HomeScreen layout matches the layout snapshot 1`] = `
               {
                 "busy": undefined,
                 "checked": undefined,
-                "disabled": undefined,
+                "disabled": false,
                 "expanded": undefined,
                 "selected": undefined,
               }

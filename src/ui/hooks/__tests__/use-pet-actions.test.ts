@@ -4,6 +4,7 @@ import { renderHook, act } from '@testing-library/react-native';
 import { storage } from '../../store/mmkv';
 import { usePetSnapshotStore } from '../../store/pet-snapshot-store';
 import { useSettingsStore } from '../../store/settings-store';
+import { useVitalityStore } from '../../store/vitality-store';
 import { usePetActions } from '../use-pet-actions';
 
 describe('usePetActions', () => {
@@ -11,8 +12,10 @@ describe('usePetActions', () => {
     storage.clearAll();
     usePetSnapshotStore.persist.clearStorage();
     useSettingsStore.persist.clearStorage();
+    useVitalityStore.persist.clearStorage();
     useSettingsStore.getState().reset();
     usePetSnapshotStore.getState().reset();
+    useVitalityStore.getState().reset();
     jest.clearAllMocks();
   });
 
@@ -56,6 +59,35 @@ describe('usePetActions', () => {
     });
     expect(Haptics.impactAsync).toHaveBeenCalled();
     expect(usePetSnapshotStore.getState().pet).toEqual(before);
+  });
+
+  it('feed is gated by vitality — insufficient → no pet change', () => {
+    useVitalityStore.setState((s) => ({ vitality: { ...s.vitality, current: 5 } }));
+    const before = usePetSnapshotStore.getState().pet.stats.satiety;
+    const { result } = renderHook(() => usePetActions());
+    act(() => {
+      result.current.feed();
+    });
+    expect(usePetSnapshotStore.getState().pet.stats.satiety).toBe(before);
+    // Haptic still fires (button press feedback) but action is a no-op.
+    expect(Haptics.impactAsync).toHaveBeenCalled();
+  });
+
+  it('play consumes vitality on success', () => {
+    const { result } = renderHook(() => usePetActions());
+    act(() => {
+      result.current.play();
+    });
+    expect(useVitalityStore.getState().vitality.current).toBe(85);
+  });
+
+  it('reset also resets vitality', () => {
+    useVitalityStore.setState((s) => ({ vitality: { ...s.vitality, current: 10 } }));
+    const { result } = renderHook(() => usePetActions());
+    act(() => {
+      result.current.reset();
+    });
+    expect(useVitalityStore.getState().vitality.current).toBe(100);
   });
 
   it('reset resets the pet and fires medium haptic', () => {
