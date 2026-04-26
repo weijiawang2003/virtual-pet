@@ -22,6 +22,13 @@
     "plugins": ["expo-router", "expo-audio"],
     "experiments": {
       "typedRoutes": true
-    }
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "e4ccea71-5656-40c9-b6db-88201d3d52c9"
+      }
+    },
+    "owner": "wangweijia1122"
   }
 }
