@@ -6,6 +6,7 @@ import { t } from '../../core/i18n/t';
 import { SettingRow } from '../components/setting-row';
 import { useHaptics } from '../haptics/use-haptics';
 import { useRuntimeProviders } from '../providers/runtime-providers-context';
+import { useSignalBus } from '../providers/signal-bus-context';
 import { usePetSnapshotStore } from '../store/pet-snapshot-store';
 import { DEMO_SPEED_OPTIONS, useSettingsStore, type DemoSpeed } from '../store/settings-store';
 import { useUserProfileStore } from '../store/user-profile-store';
@@ -89,13 +90,22 @@ export function SettingsScreen(): React.JSX.Element {
   const setDemoSpeed = useSettingsStore((s) => s.setDemoSpeed);
   const notificationsEnabled = useSettingsStore((s) => s.notificationsEnabled);
   const setNotificationsEnabled = useSettingsStore((s) => s.setNotificationsEnabled);
+  const signalsHealthEnabled = useSettingsStore((s) => s.signalsHealthEnabled);
+  const signalsLocationEnabled = useSettingsStore((s) => s.signalsLocationEnabled);
+  const signalsAppStateEnabled = useSettingsStore((s) => s.signalsAppStateEnabled);
+  const setSignalsHealthEnabled = useSettingsStore((s) => s.setSignalsHealthEnabled);
+  const setSignalsLocationEnabled = useSettingsStore((s) => s.setSignalsLocationEnabled);
+  const setSignalsAppStateEnabled = useSettingsStore((s) => s.setSignalsAppStateEnabled);
+  const setSignalsOnboardingShownAt = useSettingsStore((s) => s.setSignalsOnboardingShownAt);
   const resetPet = usePetSnapshotStore((s) => s.reset);
   const setOnboardingCompleted = useSettingsStore((s) => s.setOnboardingCompleted);
   const setNotificationsAskedAt = useSettingsStore((s) => s.setNotificationsAskedAt);
   const clearProfile = useUserProfileStore((s) => s.clear);
   const { notifications } = useRuntimeProviders();
+  const { bus } = useSignalBus();
   const haptic = useHaptics();
   const [pendingCount, setPendingCount] = useState<number>(0);
+  const recentSignals = bus.recent();
 
   useEffect(() => {
     let cancelled = false;
@@ -150,6 +160,61 @@ export function SettingsScreen(): React.JSX.Element {
           onChange={onNotificationsToggle}
           testID="toggle-notifications"
         />
+
+        <Text
+          style={{
+            color: palette.textMuted,
+            fontSize: 12,
+            paddingHorizontal: 16,
+            paddingTop: 24,
+            paddingBottom: 4,
+            textTransform: 'uppercase',
+            letterSpacing: 1,
+          }}
+        >
+          真实生活
+        </Text>
+        <SettingRow
+          label="健康数据"
+          description="走路 / 睡眠 / 心率变异度"
+          value={signalsHealthEnabled}
+          onChange={setSignalsHealthEnabled}
+          testID="toggle-signals-health"
+        />
+        <SettingRow
+          label="位置"
+          description="离家时的好奇反应(只看进出家附近)"
+          value={signalsLocationEnabled}
+          onChange={setSignalsLocationEnabled}
+          testID="toggle-signals-location"
+        />
+        <SettingRow
+          label="使用习惯"
+          description="长时间不碰手机 / 持续高强度使用"
+          value={signalsAppStateEnabled}
+          onChange={setSignalsAppStateEnabled}
+          testID="toggle-signals-appstate"
+        />
+        <View
+          style={{
+            paddingHorizontal: 16,
+            paddingTop: 8,
+            paddingBottom: 8,
+          }}
+        >
+          <Text style={{ color: palette.textMuted, fontSize: 12 }}>
+            最近信号: {recentSignals.length} 条
+          </Text>
+          {recentSignals.slice(0, 5).map((entry, i) => (
+            <Text
+              key={`${entry.emittedAt}-${i}`}
+              style={{ color: palette.textMuted, fontSize: 11, marginTop: 2 }}
+            >
+              · {entry.signal.type} → {entry.events.length} 事件
+            </Text>
+          ))}
+        </View>
+
         <PillRow<ThemeMode>
           label="主题"
           options={THEME_MODES}
@@ -197,6 +262,7 @@ export function SettingsScreen(): React.JSX.Element {
             clearProfile();
             setOnboardingCompleted(false);
             setNotificationsAskedAt(null);
+            setSignalsOnboardingShownAt(null);
             void notifications.cancelAll().then(() => setPendingCount(0));
           }}
           style={{

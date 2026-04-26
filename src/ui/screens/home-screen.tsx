@@ -17,6 +17,8 @@ import { useTheme } from '../theme/use-theme';
 
 const PERMISSION_PROMPT_DELAY_MS = 3000;
 const PERMISSION_HREF = '/notifications-permission' as Parameters<typeof router.push>[0];
+const SIGNALS_PROMPT_DELAY_MS = 1500;
+const SIGNALS_HREF = '/signals-onboarding' as Parameters<typeof router.push>[0];
 
 export function HomeScreen(): React.JSX.Element {
   const { palette, backdropTintFor } = useTheme();
@@ -25,6 +27,7 @@ export function HomeScreen(): React.JSX.Element {
   const actions = usePetActions();
   const onboardingCompleted = useSettingsStore((s) => s.onboardingCompleted);
   const notificationsAskedAt = useSettingsStore((s) => s.notificationsAskedAt);
+  const signalsOnboardingShownAt = useSettingsStore((s) => s.signalsOnboardingShownAt);
 
   // Trigger the notifications permission modal once, ~3s after the user
   // first reaches Home post-onboarding. Skipped if they've already responded
@@ -38,6 +41,19 @@ export function HomeScreen(): React.JSX.Element {
       clearTimeout(id);
     };
   }, [onboardingCompleted, notificationsAskedAt]);
+
+  // After notifications were answered, prompt for real-life signals once.
+  useEffect(() => {
+    if (!onboardingCompleted) return;
+    if (notificationsAskedAt === null) return;
+    if (signalsOnboardingShownAt !== null) return;
+    const id = setTimeout(() => {
+      router.push(SIGNALS_HREF);
+    }, SIGNALS_PROMPT_DELAY_MS);
+    return () => {
+      clearTimeout(id);
+    };
+  }, [onboardingCompleted, notificationsAskedAt, signalsOnboardingShownAt]);
 
   const moonPct = Math.round((ctx.solar?.moonIllumination ?? 0) * 100);
   const tint = backdropTintFor(visual.background);

@@ -281,4 +281,10 @@ describe('translateSignal — properties (fast-check)', () => {
       }),
     );
   });
+
+  it('throws on unknown signal kind (defensive assertNever tombstone)', () => {
+    expect(() =>
+      translateSignal({ type: 'spaceship_landed' } as unknown as LifeSignal, PET),
+    ).toThrow(/Unreachable/);
+  });
 });

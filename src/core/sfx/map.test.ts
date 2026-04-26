@@ -18,6 +18,12 @@ describe('mapEventToSfx', () => {
     expect(mapEventToSfx({ type: 'tick', elapsedMs: 60000, source: 'system' })).toBeNull();
   });
 
+  it('mood_adjust / bond_gain / curiosity_hint → null (translator outputs are silent)', () => {
+    expect(mapEventToSfx({ type: 'mood_adjust', happiness: -5, source: 'health' })).toBeNull();
+    expect(mapEventToSfx({ type: 'bond_gain', amount: 3, source: 'health' })).toBeNull();
+    expect(mapEventToSfx({ type: 'curiosity_hint', until: 1, source: 'inferred' })).toBeNull();
+  });
+
   it('throws on unknown event discriminant (defensive assertNever tombstone)', () => {
     expect(() => mapEventToSfx({ type: 'explode' } as unknown as Event)).toThrow(/Unreachable/);
   });

@@ -15,6 +15,12 @@ export interface SettingsState {
   readonly onboardingCompleted: boolean;
   readonly notificationsEnabled: boolean;
   readonly notificationsAskedAt: number | null;
+  // Phase 22 — three real-life-signal toggles. Default OFF; user opts in
+  // via Settings or the signals onboarding screen.
+  readonly signalsHealthEnabled: boolean;
+  readonly signalsLocationEnabled: boolean;
+  readonly signalsAppStateEnabled: boolean;
+  readonly signalsOnboardingShownAt: number | null;
   setHaptics: (v: boolean) => void;
   setSound: (v: boolean) => void;
   setTheme: (m: ThemeMode) => void;
@@ -22,6 +28,10 @@ export interface SettingsState {
   setOnboardingCompleted: (v: boolean) => void;
   setNotificationsEnabled: (v: boolean) => void;
   setNotificationsAskedAt: (t: number | null) => void;
+  setSignalsHealthEnabled: (v: boolean) => void;
+  setSignalsLocationEnabled: (v: boolean) => void;
+  setSignalsAppStateEnabled: (v: boolean) => void;
+  setSignalsOnboardingShownAt: (t: number | null) => void;
   reset: () => void;
 }
 
@@ -33,6 +43,10 @@ const DEFAULT_STATE = {
   onboardingCompleted: false,
   notificationsEnabled: true,
   notificationsAskedAt: null as number | null,
+  signalsHealthEnabled: false,
+  signalsLocationEnabled: false,
+  signalsAppStateEnabled: false,
+  signalsOnboardingShownAt: null as number | null,
 } as const;
 
 export const useSettingsStore = create<SettingsState>()(
@@ -46,12 +60,16 @@ export const useSettingsStore = create<SettingsState>()(
       setOnboardingCompleted: (v) => set({ onboardingCompleted: v }),
       setNotificationsEnabled: (v) => set({ notificationsEnabled: v }),
       setNotificationsAskedAt: (t) => set({ notificationsAskedAt: t }),
+      setSignalsHealthEnabled: (v) => set({ signalsHealthEnabled: v }),
+      setSignalsLocationEnabled: (v) => set({ signalsLocationEnabled: v }),
+      setSignalsAppStateEnabled: (v) => set({ signalsAppStateEnabled: v }),
+      setSignalsOnboardingShownAt: (t) => set({ signalsOnboardingShownAt: t }),
       reset: () => set({ ...DEFAULT_STATE }),
     }),
     {
       name: 'settings',
       storage: createJSONStorage(() => mmkvStorage),
-      version: 3,
+      version: 4,
     },
   ),
 );

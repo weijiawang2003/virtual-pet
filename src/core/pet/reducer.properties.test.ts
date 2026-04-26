@@ -127,6 +127,20 @@ describe('reducer properties', () => {
     expect(next.stats.satiety).toBe(70); // unchanged
   });
 
+  it('mood_adjust satiety-only path leaves energy / happiness untouched', () => {
+    const pet = createPet(0);
+    const next = reducer(pet, { type: 'mood_adjust', satiety: 8, source: 'health' });
+    expect(next.stats.satiety).toBe(78);
+    expect(next.stats.energy).toBe(70);
+    expect(next.stats.happiness).toBe(70);
+  });
+
+  it('mood_adjust with no fields is a no-op', () => {
+    const pet = createPet(0);
+    const next = reducer(pet, { type: 'mood_adjust', source: 'health' });
+    expect(next.stats).toEqual(pet.stats);
+  });
+
   it('bond_gain adds to pendingBondGain (default 0)', () => {
     const pet = createPet(0);
     const a = reducer(pet, { type: 'bond_gain', amount: 5, source: 'health' });
