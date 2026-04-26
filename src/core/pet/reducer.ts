@@ -40,6 +40,26 @@ export function reducer(state: Pet, event: Event): Pet {
       return withStats(state, { energy: state.stats.energy + event.minutes });
     case 'tick':
       return advanceStage(applyDecay(state, event.elapsedMs));
+    case 'mood_adjust': {
+      // Multi-field stat delta. Per-field optional; reducer applies what's
+      // present, clamps to [0, 100]. Used by the signal translator (sleep
+      // < 5h, heavy phone use, etc.). Use a mutable local — withStats's
+      // Partial<Stats> param is readonly, so we can't append in-place.
+      const patch: { satiety?: number; energy?: number; happiness?: number } = {};
+      if (event.satiety !== undefined) patch.satiety = state.stats.satiety + event.satiety;
+      if (event.energy !== undefined) patch.energy = state.stats.energy + event.energy;
+      if (event.happiness !== undefined) patch.happiness = state.stats.happiness + event.happiness;
+      return withStats(state, patch);
+    }
+    case 'bond_gain':
+      // Accumulator for Phase 23 Vitality. Just adds to the pending pool.
+      return { ...state, pendingBondGain: (state.pendingBondGain ?? 0) + event.amount };
+    case 'curiosity_hint':
+      // max() so overlapping hints extend the window rather than clobber.
+      return {
+        ...state,
+        curiosityHintUntil: Math.max(state.curiosityHintUntil ?? 0, event.until),
+      };
     default:
       return assertNever(event);
   }

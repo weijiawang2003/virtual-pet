@@ -1,7 +1,35 @@
+import fc from 'fast-check';
+
+import type { AnimationKey, MoodTag } from './types';
 import { makeContext, makePet } from './__fixtures__/build-context';
 import { selectAnimation } from './select-animation';
 
 const H = 60 * 60 * 1000;
+
+describe('selectAnimation — Phase 21 egg silence', () => {
+  const arbMood: fc.Arbitrary<MoodTag> = fc.constantFrom(
+    'happy',
+    'sleepy',
+    'excited',
+    'low',
+    'curious',
+    'cozy',
+    'hungry',
+    'dirty',
+  );
+  const arbHourMs: fc.Arbitrary<number> = fc.integer({ min: 0, max: 23 }).map((h) => h * H);
+
+  it('egg always returns "idle" regardless of mood / context / energy', () => {
+    fc.assert(
+      fc.property(arbMood, arbHourMs, fc.integer({ min: 0, max: 100 }), (mood, nowMs, energy) => {
+        const pet = makePet('egg', { energy });
+        const ctx = makeContext({ pet, nowMs });
+        const out: AnimationKey = selectAnimation(pet, ctx, mood);
+        expect(out).toBe('idle');
+      }),
+    );
+  });
+});
 
 describe('selectAnimation', () => {
   it('sleep when sleepy at night', () => {

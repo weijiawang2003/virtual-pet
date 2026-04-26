@@ -53,20 +53,34 @@ describe('PetSprite — registered assets render expo-image', () => {
   });
 });
 
+describe('PetSprite — Phase 21 baby-idle / baby-low fills now use images', () => {
+  it('baby-idle + curious → image (filled in Phase 21)', () => {
+    const { getByTestId, queryByTestId } = renderSprite('baby-idle', 'curious', 'curious');
+    expect(getByTestId('pet-sprite-image')).toBeTruthy();
+    expect(queryByTestId('pet-sprite-emoji')).toBeNull();
+  });
+
+  it('baby-idle + cozy → image (filled in Phase 21)', () => {
+    const { getByTestId } = renderSprite('baby-idle', 'cozy', 'cuddle');
+    expect(getByTestId('pet-sprite-image')).toBeTruthy();
+  });
+
+  it('baby-low + low → image (filled in Phase 21, uses sleepy.png)', () => {
+    const { getByTestId } = renderSprite('baby-low', 'low', 'low');
+    expect(getByTestId('pet-sprite-image')).toBeTruthy();
+  });
+});
+
 describe('PetSprite — unregistered cells fall back to emoji', () => {
-  it('baby-idle + curious → emoji (no asset)', () => {
-    const { getByTestId, getByText, queryByTestId } = renderSprite(
-      'baby-idle',
-      'curious',
-      'curious',
-    );
+  it('baby-idle + happy → emoji (Phase 21 only filled curious/cozy/dirty for baby-idle)', () => {
+    const { getByTestId, getByText, queryByTestId } = renderSprite('baby-idle', 'happy', 'idle');
     expect(getByTestId('pet-sprite-emoji')).toBeTruthy();
     expect(getByText('🐣')).toBeTruthy();
     expect(queryByTestId('pet-sprite-image')).toBeNull();
   });
 
-  it('baby-low + low → emoji (no asset)', () => {
-    const { getByTestId, getByText } = renderSprite('baby-low', 'low', 'low');
+  it('baby-idle + hungry → emoji (Phase 21 left this cell empty)', () => {
+    const { getByTestId, getByText } = renderSprite('baby-idle', 'hungry', 'idle');
     expect(getByTestId('pet-sprite-emoji')).toBeTruthy();
     expect(getByText('🐣')).toBeTruthy();
   });

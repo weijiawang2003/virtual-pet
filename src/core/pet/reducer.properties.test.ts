@@ -1,23 +1,51 @@
 import fc from 'fast-check';
 import { createPet, reducer } from './reducer';
-import type { Event } from './types';
+import type { Event, PetEventSource } from './types';
+
+const arbSource: fc.Arbitrary<PetEventSource> = fc.constantFrom(
+  'manual',
+  'health',
+  'inferred',
+  'system',
+);
 
 const arbEvent: fc.Arbitrary<Event> = fc.oneof(
   fc.record({
     type: fc.constant('feed' as const),
     nutrition: fc.double({ min: -200, max: 200, noNaN: true }),
+    source: arbSource,
   }),
   fc.record({
     type: fc.constant('play' as const),
     minutes: fc.double({ min: -200, max: 200, noNaN: true }),
+    source: arbSource,
   }),
   fc.record({
     type: fc.constant('rest' as const),
     minutes: fc.double({ min: -200, max: 200, noNaN: true }),
+    source: arbSource,
   }),
   fc.record({
     type: fc.constant('tick' as const),
     elapsedMs: fc.double({ min: 0, max: 10 * 60 * 60 * 1000, noNaN: true }),
+    source: arbSource,
+  }),
+  fc.record({
+    type: fc.constant('mood_adjust' as const),
+    happiness: fc.double({ min: -50, max: 50, noNaN: true }),
+    energy: fc.double({ min: -50, max: 50, noNaN: true }),
+    satiety: fc.double({ min: -50, max: 50, noNaN: true }),
+    source: arbSource,
+  }),
+  fc.record({
+    type: fc.constant('bond_gain' as const),
+    amount: fc.integer({ min: 0, max: 100 }),
+    source: arbSource,
+  }),
+  fc.record({
+    type: fc.constant('curiosity_hint' as const),
+    until: fc.integer({ min: 0, max: Number.MAX_SAFE_INTEGER }),
+    source: arbSource,
   }),
 );
 
@@ -43,14 +71,17 @@ describe('reducer properties', () => {
       fc.record({
         type: fc.constant('feed' as const),
         nutrition: fc.double({ min: -200, max: 200, noNaN: true }),
+        source: arbSource,
       }),
       fc.record({
         type: fc.constant('play' as const),
         minutes: fc.double({ min: -200, max: 200, noNaN: true }),
+        source: arbSource,
       }),
       fc.record({
         type: fc.constant('rest' as const),
         minutes: fc.double({ min: -200, max: 200, noNaN: true }),
+        source: arbSource,
       }),
     );
     fc.assert(
@@ -81,5 +112,38 @@ describe('reducer properties', () => {
         expect(JSON.stringify(pet)).toBe(snapshot);
       }),
     );
+  });
+
+  it('mood_adjust applies stat deltas with clamping', () => {
+    const pet = createPet(0);
+    const next = reducer(pet, {
+      type: 'mood_adjust',
+      happiness: -10,
+      energy: 5,
+      source: 'health',
+    });
+    expect(next.stats.happiness).toBe(60);
+    expect(next.stats.energy).toBe(75);
+    expect(next.stats.satiety).toBe(70); // unchanged
+  });
+
+  it('bond_gain adds to pendingBondGain (default 0)', () => {
+    const pet = createPet(0);
+    const a = reducer(pet, { type: 'bond_gain', amount: 5, source: 'health' });
+    expect(a.pendingBondGain).toBe(5);
+    const b = reducer(a, { type: 'bond_gain', amount: 3, source: 'health' });
+    expect(b.pendingBondGain).toBe(8);
+  });
+
+  it('curiosity_hint takes max() with existing window', () => {
+    const pet = createPet(0);
+    const a = reducer(pet, { type: 'curiosity_hint', until: 100, source: 'inferred' });
+    expect(a.curiosityHintUntil).toBe(100);
+    // Smaller until shouldn't overwrite a larger active window.
+    const b = reducer(a, { type: 'curiosity_hint', until: 50, source: 'inferred' });
+    expect(b.curiosityHintUntil).toBe(100);
+    // Larger until extends.
+    const c = reducer(b, { type: 'curiosity_hint', until: 200, source: 'inferred' });
+    expect(c.curiosityHintUntil).toBe(200);
   });
 });

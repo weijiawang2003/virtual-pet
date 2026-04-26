@@ -59,7 +59,7 @@ describe('usePetActions', () => {
   });
 
   it('reset resets the pet and fires medium haptic', () => {
-    usePetSnapshotStore.getState().dispatch({ type: 'feed', nutrition: 30 });
+    usePetSnapshotStore.getState().dispatch({ type: 'feed', nutrition: 30, source: 'manual' });
     expect(usePetSnapshotStore.getState().pet.stats.satiety).toBe(100);
 
     const { result } = renderHook(() => usePetActions());

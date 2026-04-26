@@ -84,7 +84,7 @@ describe('planScheduledNotifications', () => {
 
   it('a fed pet stays out of the schedule', () => {
     const fresh = petWithStats(70, 70, 70);
-    const fed = reducer(fresh, { type: 'feed', nutrition: 30 });
+    const fed = reducer(fresh, { type: 'feed', nutrition: 30, source: 'manual' });
     const out = planScheduledNotifications({
       pet: fed,
       nowMs: NOW,

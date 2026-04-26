@@ -119,7 +119,7 @@ exports[`HomeScreen layout matches the layout snapshot 1`] = `
           }
         >
           <View
-            accessibilityLabel="egg pet · happy · bounce"
+            accessibilityLabel="egg pet · happy · idle"
             accessibilityRole="image"
             style={
               {
@@ -141,7 +141,7 @@ exports[`HomeScreen layout matches the layout snapshot 1`] = `
                   "opacity": 1,
                   "transform": [
                     {
-                      "translateY": 0,
+                      "translateY": -2,
                     },
                     {
                       "translateX": 0,
@@ -181,36 +181,7 @@ exports[`HomeScreen layout matches the layout snapshot 1`] = `
                 "minHeight": 40,
               }
             }
-          >
-            <View
-              accessibilityLabel="Bubble: 阳光真好"
-              accessibilityRole="text"
-              style={
-                {
-                  "alignSelf": "center",
-                  "backgroundColor": "#FFFFFF",
-                  "borderColor": "#E2DFD8",
-                  "borderRadius": 18,
-                  "borderWidth": 1,
-                  "maxWidth": 280,
-                  "paddingHorizontal": 14,
-                  "paddingVertical": 10,
-                }
-              }
-            >
-              <Text
-                style={
-                  {
-                    "color": "#1A1A1A",
-                    "fontSize": 14,
-                    "lineHeight": 20,
-                  }
-                }
-              >
-                阳光真好
-              </Text>
-            </View>
-          </View>
+          />
         </View>
         <View
           style={

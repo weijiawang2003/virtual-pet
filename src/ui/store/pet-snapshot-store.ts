@@ -40,7 +40,7 @@ export const usePetSnapshotStore = create<PetSnapshotState>()(
           return;
         }
         set({
-          pet: reducer(pet, { type: 'tick', elapsedMs: elapsedSimulated }),
+          pet: reducer(pet, { type: 'tick', elapsedMs: elapsedSimulated, source: 'system' }),
           lastTickedAt: now,
         });
       },

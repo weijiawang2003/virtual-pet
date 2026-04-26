@@ -24,6 +24,9 @@ function isRainy(ctx: LifeContext): boolean {
 
 // Priority: sleep > emotional > weather > full-moon-stare > mood > idle.
 export function selectAnimation(pet: Pet, ctx: LifeContext, mood: MoodTag): AnimationKey {
+  // Phase 21: egg is visibly still. No animation until it hatches.
+  if (pet.stage === 'egg') return 'idle';
+
   // 1. Sleep override — pet literally napping.
   const isNight = ctx.hourOfDay >= 22 || ctx.hourOfDay < 6;
   if (mood === 'sleepy' && (isNight || pet.stats.energy < 15)) return 'sleep';

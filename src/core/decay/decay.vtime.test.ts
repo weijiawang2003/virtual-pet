@@ -19,7 +19,7 @@ describe('48h virtual-clock snapshot', () => {
     for (let h = 1; h <= 48; h++) {
       clock.advance(MS_PER_HOUR);
       const elapsed = clock.now() - lastTickAt;
-      pet = reducer(pet, { type: 'tick', elapsedMs: elapsed });
+      pet = reducer(pet, { type: 'tick', elapsedMs: elapsed, source: 'system' });
       lastTickAt = clock.now();
     }
 
@@ -39,10 +39,10 @@ describe('48h virtual-clock snapshot', () => {
 
     let stepped = pet0;
     for (let h = 0; h < 48; h++) {
-      stepped = reducer(stepped, { type: 'tick', elapsedMs: MS_PER_HOUR });
+      stepped = reducer(stepped, { type: 'tick', elapsedMs: MS_PER_HOUR, source: 'system' });
     }
 
-    const bulk = reducer(pet0, { type: 'tick', elapsedMs: 48 * MS_PER_HOUR });
+    const bulk = reducer(pet0, { type: 'tick', elapsedMs: 48 * MS_PER_HOUR, source: 'system' });
 
     expect(stepped.stats.satiety).toBeCloseTo(bulk.stats.satiety, 6);
     expect(stepped.stats.energy).toBeCloseTo(bulk.stats.energy, 6);

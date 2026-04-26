@@ -51,9 +51,9 @@ exports[`compose — 6-fixture snapshot child on a rainy day 1`] = `
 exports[`compose — 6-fixture snapshot egg just hatched 1`] = `
 {
   "accessory": null,
-  "animation": "bounce",
+  "animation": "idle",
   "background": "sunny",
-  "bubble": "happy",
+  "bubble": null,
   "hapticHint": null,
   "mood": "happy",
   "sprite": "egg",

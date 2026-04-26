@@ -1,26 +1,37 @@
 import fc from 'fast-check';
 import { createPet, reducer } from './reducer';
 import { stageRank } from './stages';
-import type { Event } from './types';
+import type { Event, PetEventSource } from './types';
 
 const H = 60 * 60 * 1000;
+
+const arbSource: fc.Arbitrary<PetEventSource> = fc.constantFrom(
+  'manual',
+  'health',
+  'inferred',
+  'system',
+);
 
 const arbEvent: fc.Arbitrary<Event> = fc.oneof(
   fc.record({
     type: fc.constant('feed' as const),
     nutrition: fc.double({ min: -200, max: 200, noNaN: true }),
+    source: arbSource,
   }),
   fc.record({
     type: fc.constant('play' as const),
     minutes: fc.double({ min: -200, max: 200, noNaN: true }),
+    source: arbSource,
   }),
   fc.record({
     type: fc.constant('rest' as const),
     minutes: fc.double({ min: -200, max: 200, noNaN: true }),
+    source: arbSource,
   }),
   fc.record({
     type: fc.constant('tick' as const),
     elapsedMs: fc.double({ min: 0, max: 10 * H, noNaN: true }),
+    source: arbSource,
   }),
 );
 
@@ -53,7 +64,7 @@ describe('stage monotonicity', () => {
   it('after enough elapsed time, the pet reaches adult', () => {
     fc.assert(
       fc.property(fc.double({ min: 72 * H, max: 1000 * H, noNaN: true }), (totalMs) => {
-        const pet = reducer(createPet(0), { type: 'tick', elapsedMs: totalMs });
+        const pet = reducer(createPet(0), { type: 'tick', elapsedMs: totalMs, source: 'system' });
         expect(pet.stage).toBe('adult');
       }),
     );

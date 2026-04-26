@@ -57,6 +57,25 @@ describe('lookupSprite', () => {
     expect(lookupSprite('baby-happy', 'curious')).toBeNull();
   });
 
+  describe('Phase 21 — baby-idle / baby-low fills', () => {
+    it('baby-idle + curious is registered (was emoji before)', () => {
+      expect(lookupSprite('baby-idle', 'curious')).not.toBeNull();
+    });
+    it('baby-idle + cozy is registered', () => {
+      expect(lookupSprite('baby-idle', 'cozy')).not.toBeNull();
+    });
+    it('baby-idle + dirty is registered', () => {
+      expect(lookupSprite('baby-idle', 'dirty')).not.toBeNull();
+    });
+    it('baby-low + low is registered', () => {
+      expect(lookupSprite('baby-low', 'low')).not.toBeNull();
+    });
+    it('baby-idle still returns null for moods we did not fill', () => {
+      expect(lookupSprite('baby-idle', 'happy')).toBeNull();
+      expect(lookupSprite('baby-idle', 'hungry')).toBeNull();
+    });
+  });
+
   it('SPRITE_REGISTRY is frozen', () => {
     expect(Object.isFrozen(SPRITE_REGISTRY)).toBe(true);
   });

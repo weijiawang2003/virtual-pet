@@ -31,6 +31,8 @@ function isLowHrv(ctx: LifeContext): boolean {
 
 // Priority: festivals > health signals > stat thresholds > default null.
 export function selectBubble(pet: Pet, ctx: LifeContext): BubbleKey | null {
+  // Phase 21: egg never says anything. It hasn't hatched.
+  if (pet.stage === 'egg') return null;
   if (isBirthdayToday(ctx)) return 'birthday';
   if (isCnyToday(ctx)) return 'cny';
   if (isFullMoon(ctx)) return 'fullmoon';

@@ -26,26 +26,26 @@ describe('createPet', () => {
 describe('reducer — feed', () => {
   it('increases satiety by nutrition', () => {
     const pet = createPet(0);
-    const next = reducer(pet, { type: 'feed', nutrition: 10 });
+    const next = reducer(pet, { type: 'feed', nutrition: 10, source: 'manual' });
     expect(next.stats.satiety).toBe(80);
   });
 
   it('clamps satiety at 100', () => {
     const pet = createPet(0);
-    const next = reducer(pet, { type: 'feed', nutrition: 999 });
+    const next = reducer(pet, { type: 'feed', nutrition: 999, source: 'manual' });
     expect(next.stats.satiety).toBe(100);
   });
 
   it('does not mutate the input state', () => {
     const pet = createPet(0);
     const snapshot = JSON.stringify(pet);
-    reducer(pet, { type: 'feed', nutrition: 5 });
+    reducer(pet, { type: 'feed', nutrition: 5, source: 'manual' });
     expect(JSON.stringify(pet)).toBe(snapshot);
   });
 
   it('leaves energy and happiness untouched', () => {
     const pet = createPet(0);
-    const next = reducer(pet, { type: 'feed', nutrition: 10 });
+    const next = reducer(pet, { type: 'feed', nutrition: 10, source: 'manual' });
     expect(next.stats.energy).toBe(pet.stats.energy);
     expect(next.stats.happiness).toBe(pet.stats.happiness);
   });
@@ -54,14 +54,14 @@ describe('reducer — feed', () => {
 describe('reducer — play', () => {
   it('increases happiness and decreases energy', () => {
     const pet = createPet(0);
-    const next = reducer(pet, { type: 'play', minutes: 10 });
+    const next = reducer(pet, { type: 'play', minutes: 10, source: 'manual' });
     expect(next.stats.happiness).toBe(80);
     expect(next.stats.energy).toBe(65);
   });
 
   it('clamps both stats', () => {
     const pet = createPet(0);
-    const happy = reducer(pet, { type: 'play', minutes: 1000 });
+    const happy = reducer(pet, { type: 'play', minutes: 1000, source: 'manual' });
     expect(happy.stats.happiness).toBe(100);
     expect(happy.stats.energy).toBe(0);
   });
@@ -70,13 +70,13 @@ describe('reducer — play', () => {
 describe('reducer — rest', () => {
   it('increases energy by minutes', () => {
     const pet = createPet(0);
-    const next = reducer(pet, { type: 'rest', minutes: 20 });
+    const next = reducer(pet, { type: 'rest', minutes: 20, source: 'manual' });
     expect(next.stats.energy).toBe(90);
   });
 
   it('clamps energy at 100', () => {
     const pet = createPet(0);
-    const next = reducer(pet, { type: 'rest', minutes: 500 });
+    const next = reducer(pet, { type: 'rest', minutes: 500, source: 'manual' });
     expect(next.stats.energy).toBe(100);
   });
 });
@@ -91,7 +91,7 @@ describe('reducer — exhaustiveness', () => {
 describe('reducer — tick (Phase 2)', () => {
   it('delegates to applyDecay for tick events', () => {
     const pet = createPet(0);
-    const next = reducer(pet, { type: 'tick', elapsedMs: 60 * 60 * 1000 });
+    const next = reducer(pet, { type: 'tick', elapsedMs: 60 * 60 * 1000, source: 'system' });
     expect(next.ageMs).toBe(60 * 60 * 1000);
     expect(next.stats.satiety).toBeLessThan(pet.stats.satiety);
   });
@@ -99,9 +99,9 @@ describe('reducer — tick (Phase 2)', () => {
 
 describe('reducer — Phase 1 invariants (non-tick events)', () => {
   const events: readonly Event[] = [
-    { type: 'feed', nutrition: 15 },
-    { type: 'play', minutes: 30 },
-    { type: 'rest', minutes: 10 },
+    { type: 'feed', nutrition: 15, source: 'manual' },
+    { type: 'play', minutes: 30, source: 'manual' },
+    { type: 'rest', minutes: 10, source: 'manual' },
   ];
 
   it('never changes stage for feed/play/rest', () => {

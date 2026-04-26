@@ -36,13 +36,25 @@ function eggAllMoods(): Record<MoodTag, SpriteAsset> {
   };
 }
 
+// Helper: assigns the same asset to multiple moods on a single SpriteKey.
+// Used for `baby-idle` (3 moods → happy.png as a neutral default) etc.
+function assignAll(
+  moods: readonly MoodTag[],
+  asset: SpriteAsset,
+): Partial<Record<MoodTag, SpriteAsset>> {
+  const out: Partial<Record<MoodTag, SpriteAsset>> = {};
+  for (const m of moods) out[m] = asset;
+  return out;
+}
+
 // Pair registry. (SpriteKey, MoodTag) → asset. Unregistered cells return
 // null from `lookupSprite`, signaling the caller to fall back to emoji.
 //
 // IMPORTANT: `mood='excited'` collapses onto `SpriteKey='baby-happy'` per
 // `core/visual/select-sprite.ts`, so the excited variant is registered
 // under that SpriteKey + the `excited` mood key — NOT under a hypothetical
-// `baby-excited` SpriteKey (which doesn't exist).
+// `baby-excited` SpriteKey (which doesn't exist). Same pattern for
+// `baby-idle` (curious / cozy / dirty all collapse onto it).
 export const SPRITE_REGISTRY: Partial<Record<SpriteKey, Partial<Record<MoodTag, SpriteAsset>>>> =
   Object.freeze({
     egg: eggAllMoods(),
@@ -55,6 +67,14 @@ export const SPRITE_REGISTRY: Partial<Record<SpriteKey, Partial<Record<MoodTag, 
     }),
     'baby-hungry': Object.freeze({
       hungry: PIXEL(BABY_HUNGRY_ASSET),
+    }),
+    // baby-idle reachable via curious / cozy / dirty per select-sprite.ts.
+    // No dedicated artwork yet → fall back to the happy PNG (neutral-positive).
+    'baby-idle': Object.freeze(assignAll(['curious', 'cozy', 'dirty'], PIXEL(BABY_HAPPY_ASSET))),
+    // baby-low reachable via low mood. Slumped sleepy art is the closest
+    // available read until a dedicated low PNG ships.
+    'baby-low': Object.freeze({
+      low: PIXEL(BABY_SLEEPY_ASSET),
     }),
   });
 

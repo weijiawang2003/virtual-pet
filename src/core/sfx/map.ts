@@ -15,6 +15,13 @@ export function mapEventToSfx(event: Event): SfxKey | null {
       return 'sleep-snore';
     case 'tick':
       return null;
+    // Phase 21 — translator output. None of these events should ring an
+    // SFX (mood adjust is silent, bond_gain is silent, curiosity_hint is
+    // a state flag, not a notification).
+    case 'mood_adjust':
+    case 'bond_gain':
+    case 'curiosity_hint':
+      return null;
     default:
       return assertNever(event);
   }

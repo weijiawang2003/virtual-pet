@@ -1,7 +1,27 @@
+import fc from 'fast-check';
+
 import { makeContext, makePet } from './__fixtures__/build-context';
 import { selectBubble } from './select-bubble';
 
 const H = 60 * 60 * 1000;
+
+describe('selectBubble — Phase 21 egg silence', () => {
+  it('egg always returns null regardless of stats / context', () => {
+    fc.assert(
+      fc.property(
+        fc.integer({ min: 0, max: 100 }),
+        fc.integer({ min: 0, max: 100 }),
+        fc.integer({ min: 0, max: 100 }),
+        fc.integer({ min: 0, max: 23 }),
+        (satiety, energy, happiness, hour) => {
+          const pet = makePet('egg', { satiety, energy, happiness });
+          const ctx = makeContext({ pet, nowMs: Date.UTC(2026, 3, 24, hour, 0, 0) });
+          expect(selectBubble(pet, ctx)).toBeNull();
+        },
+      ),
+    );
+  });
+});
 
 describe('selectBubble', () => {
   it('returns null when nothing notable', () => {

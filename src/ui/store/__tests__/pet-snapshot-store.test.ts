@@ -21,10 +21,10 @@ describe('usePetSnapshotStore', () => {
   });
 
   it('dispatch routes events through the core reducer', () => {
-    usePetSnapshotStore.getState().dispatch({ type: 'feed', nutrition: 20 });
+    usePetSnapshotStore.getState().dispatch({ type: 'feed', nutrition: 20, source: 'manual' });
     expect(usePetSnapshotStore.getState().pet.stats.satiety).toBe(90);
 
-    usePetSnapshotStore.getState().dispatch({ type: 'play', minutes: 10 });
+    usePetSnapshotStore.getState().dispatch({ type: 'play', minutes: 10, source: 'manual' });
     expect(usePetSnapshotStore.getState().pet.stats.happiness).toBe(80);
     expect(usePetSnapshotStore.getState().pet.stats.energy).toBe(65);
   });
@@ -53,8 +53,8 @@ describe('usePetSnapshotStore', () => {
   });
 
   it('reset returns the pet to a fresh egg', () => {
-    usePetSnapshotStore.getState().dispatch({ type: 'feed', nutrition: 10 });
-    usePetSnapshotStore.getState().dispatch({ type: 'play', minutes: 5 });
+    usePetSnapshotStore.getState().dispatch({ type: 'feed', nutrition: 10, source: 'manual' });
+    usePetSnapshotStore.getState().dispatch({ type: 'play', minutes: 5, source: 'manual' });
     usePetSnapshotStore.getState().reset();
     const { pet } = usePetSnapshotStore.getState();
     expect(pet.stage).toBe('egg');

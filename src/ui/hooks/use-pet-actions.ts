@@ -24,17 +24,17 @@ export function usePetActions(): PetActions {
 
   const feed = useCallback(() => {
     haptics.trigger('light');
-    dispatch({ type: 'feed', nutrition: FEED_NUTRITION });
+    dispatch({ type: 'feed', nutrition: FEED_NUTRITION, source: 'manual' });
   }, [dispatch, haptics]);
 
   const play = useCallback(() => {
     haptics.trigger('light');
-    dispatch({ type: 'play', minutes: PLAY_MINUTES });
+    dispatch({ type: 'play', minutes: PLAY_MINUTES, source: 'manual' });
   }, [dispatch, haptics]);
 
   const restAction = useCallback(() => {
     haptics.trigger('light');
-    dispatch({ type: 'rest', minutes: REST_MINUTES });
+    dispatch({ type: 'rest', minutes: REST_MINUTES, source: 'manual' });
   }, [dispatch, haptics]);
 
   const clean = useCallback(() => {
