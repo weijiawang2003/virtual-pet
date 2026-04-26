@@ -11,9 +11,27 @@
     "assetBundlePatterns": ["**/*"],
     "ios": {
       "bundleIdentifier": "com.placeholder.virtualpet",
-      "supportsTablet": false
+      "supportsTablet": false,
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "用你大致的位置感知\"是否在家附近\",让小宠物知道你出门或回来。只看进出家附近,不存轨迹,所有处理都在这台 iPhone 上。",
+        "NSLocationAlwaysAndWhenInUseUsageDescription": "你不在 App 里的时候,小宠物也想知道你回家了。只用来触发\"到家\"的反应,不持续追踪,不上传任何位置。",
+        "NSMotionUsageDescription": "用走路、跑步这类活动信号,让小宠物感知你今天的节奏——动得多它更有活力。完全在设备上处理,不联网。",
+        "UIBackgroundModes": ["fetch", "location"]
+      }
     },
-    "plugins": ["expo-router", "expo-audio", "expo-asset", "@kingstinct/react-native-healthkit"],
+    "plugins": [
+      "expo-router",
+      "expo-audio",
+      "expo-asset",
+      "expo-task-manager",
+      [
+        "@kingstinct/react-native-healthkit",
+        {
+          "NSHealthShareUsageDescription": "用你的步数、睡眠、心率,让小宠物感知你的生活——走路时它会更有活力,睡得好它睡得安稳。所有数据只在这台 iPhone 里,不上传任何地方。",
+          "NSHealthUpdateUsageDescription": "记录与小宠物一起完成的正念时刻到健康 App。"
+        }
+      ]
+    ],
     "experiments": {
       "typedRoutes": true
     },
