@@ -20,50 +20,95 @@ function renderSprite(sprite: SpriteKey, mood: MoodTag, animation: AnimationKey)
   );
 }
 
-describe('PetSprite', () => {
-  it('renders the egg primary glyph for sprite=egg', () => {
-    const { getByLabelText, getByText } = renderSprite('egg', 'happy', 'idle');
-    expect(getByLabelText('egg pet · happy · idle')).toBeTruthy();
-    expect(getByText('🥚')).toBeTruthy();
+describe('PetSprite — registered assets render expo-image', () => {
+  it('egg + happy → image (egg ignores mood)', () => {
+    const { getByTestId, queryByTestId } = renderSprite('egg', 'happy', 'idle');
+    expect(getByTestId('pet-sprite-image')).toBeTruthy();
+    expect(queryByTestId('pet-sprite-emoji')).toBeNull();
   });
 
-  it('renders 🐣 for any baby sprite', () => {
-    const { getByText } = renderSprite('baby-happy', 'happy', 'bounce');
+  it('egg + sleepy → image (egg ignores mood)', () => {
+    const { getByTestId } = renderSprite('egg', 'sleepy', 'sleep');
+    expect(getByTestId('pet-sprite-image')).toBeTruthy();
+  });
+
+  it('baby-happy + happy → image (registered)', () => {
+    const { getByTestId } = renderSprite('baby-happy', 'happy', 'bounce');
+    expect(getByTestId('pet-sprite-image')).toBeTruthy();
+  });
+
+  it('baby-happy + excited → image (different asset than happy)', () => {
+    const { getByTestId } = renderSprite('baby-happy', 'excited', 'dance');
+    expect(getByTestId('pet-sprite-image')).toBeTruthy();
+  });
+
+  it('baby-sleepy + sleepy → image (registered)', () => {
+    const { getByTestId } = renderSprite('baby-sleepy', 'sleepy', 'sleep');
+    expect(getByTestId('pet-sprite-image')).toBeTruthy();
+  });
+
+  it('baby-hungry + hungry → image (registered)', () => {
+    const { getByTestId } = renderSprite('baby-hungry', 'hungry', 'idle');
+    expect(getByTestId('pet-sprite-image')).toBeTruthy();
+  });
+});
+
+describe('PetSprite — unregistered cells fall back to emoji', () => {
+  it('baby-idle + curious → emoji (no asset)', () => {
+    const { getByTestId, getByText, queryByTestId } = renderSprite(
+      'baby-idle',
+      'curious',
+      'curious',
+    );
+    expect(getByTestId('pet-sprite-emoji')).toBeTruthy();
+    expect(getByText('🐣')).toBeTruthy();
+    expect(queryByTestId('pet-sprite-image')).toBeNull();
+  });
+
+  it('baby-low + low → emoji (no asset)', () => {
+    const { getByTestId, getByText } = renderSprite('baby-low', 'low', 'low');
+    expect(getByTestId('pet-sprite-emoji')).toBeTruthy();
     expect(getByText('🐣')).toBeTruthy();
   });
 
-  it('renders 🐥 for any child sprite', () => {
-    const { getByText } = renderSprite('child-curious', 'curious', 'curious');
+  it('child-curious + curious → emoji', () => {
+    const { getByText, queryByTestId } = renderSprite('child-curious', 'curious', 'curious');
     expect(getByText('🐥')).toBeTruthy();
+    expect(queryByTestId('pet-sprite-image')).toBeNull();
   });
 
-  it('renders 🐤 for any teen sprite', () => {
+  it('teen-excited + excited → emoji', () => {
     const { getByText } = renderSprite('teen-excited', 'excited', 'dance');
     expect(getByText('🐤')).toBeTruthy();
   });
 
-  it('renders 🐔 for any adult sprite', () => {
+  it('adult-cozy + cozy → emoji', () => {
     const { getByText } = renderSprite('adult-cozy', 'cozy', 'cuddle');
     expect(getByText('🐔')).toBeTruthy();
   });
 
-  it('shows 💤 overlay when mood is sleepy', () => {
+  it('shows 💤 overlay when mood is sleepy on emoji path', () => {
+    // teen-sleepy isn't registered → emoji path; sleepy overlay applies.
     const { getByText } = renderSprite('teen-sleepy', 'sleepy', 'sleep');
     expect(getByText('💤')).toBeTruthy();
   });
 
-  it('shows no overlay for happy mood (the default)', () => {
+  it('emoji path shows no overlay for happy mood', () => {
+    // child-happy isn't registered → emoji; happy mood has no overlay.
     const { queryByText } = renderSprite('child-happy', 'happy', 'bounce');
     expect(queryByText('💤')).toBeNull();
     expect(queryByText('😋')).toBeNull();
   });
+});
 
+describe('PetSprite — a11y + smoke', () => {
   it('a11y label encodes stage, mood, and animation', () => {
     const { getByLabelText } = renderSprite('adult-low', 'low', 'low');
     expect(getByLabelText('adult pet · low · low')).toBeTruthy();
   });
 
-  // Smoke-render every animation to make sure no hook combo crashes.
+  // Render every animation key once on a path that hits both branches:
+  // teen-idle is unregistered (emoji), egg is registered (image).
   const ANIMS: readonly AnimationKey[] = [
     'idle',
     'bounce',
@@ -78,9 +123,13 @@ describe('PetSprite', () => {
   ];
 
   for (const anim of ANIMS) {
-    it(`renders without crashing for animation=${anim}`, () => {
+    it(`emoji branch renders without crashing for animation=${anim}`, () => {
       const { getByLabelText } = renderSprite('teen-idle', 'happy', anim);
       expect(getByLabelText(`teen pet · happy · ${anim}`)).toBeTruthy();
+    });
+    it(`image branch renders without crashing for animation=${anim}`, () => {
+      const { getByLabelText } = renderSprite('egg', 'happy', anim);
+      expect(getByLabelText(`egg pet · happy · ${anim}`)).toBeTruthy();
     });
   }
 });

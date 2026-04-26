@@ -157,23 +157,20 @@ exports[`HomeScreen layout matches the layout snapshot 1`] = `
               }
             >
               <View
-                style={
+                contentFit="contain"
+                source={
                   {
-                    "alignItems": "center",
-                    "justifyContent": "center",
+                    "testUri": "../../../../../../assets/sprites/egg.png",
                   }
                 }
-              >
-                <Text
-                  style={
-                    {
-                      "fontSize": 120,
-                    }
+                style={
+                  {
+                    "height": 192,
+                    "width": 192,
                   }
-                >
-                  🥚
-                </Text>
-              </View>
+                }
+                testID="pet-sprite-image"
+              />
             </View>
           </View>
           <View

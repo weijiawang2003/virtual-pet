@@ -1,3 +1,4 @@
+import { Image as ExpoImage } from 'expo-image';
 import { Text, View, type StyleProp, type ViewStyle } from 'react-native';
 import Animated from 'react-native-reanimated';
 
@@ -5,12 +6,13 @@ import type { LifeStage } from '../../core/pet/types';
 import type { AnimationKey, MoodTag, SpriteKey } from '../../core/visual/types';
 import { useTheme } from '../theme/use-theme';
 import { useSpriteAnimation } from './animations/sprite-animations';
+import { lookupSprite } from './sprite-registry';
 
 const SIZE = 240;
+const IMAGE_SIZE = 192;
 
-// SpriteKey → primary stage emoji. Phase 16 uses styled emoji as the sprite
-// source so we can ship animation + a11y without art assets. Real sprite art
-// will swap the primary emoji for `<expo-image>` keyed off SpriteKey.
+// Stage-level fallback emoji when no real PNG is registered for the
+// (SpriteKey, MoodTag) pair. Real artwork takes precedence in `PetSprite`.
 const PRIMARY_EMOJI: Record<LifeStage, string> = {
   egg: '🥚',
   baby: '🐣',
@@ -19,8 +21,8 @@ const PRIMARY_EMOJI: Record<LifeStage, string> = {
   adult: '🐔',
 };
 
-// MoodTag → optional secondary emoji laid below the primary as a status
-// modifier. `null` = no overlay (default mood for stage).
+// MoodTag → optional secondary emoji laid below the primary in the emoji
+// fallback path. `null` = no overlay.
 const MOOD_OVERLAY: Record<MoodTag, string | null> = {
   happy: null,
   sleepy: '💤',
@@ -52,8 +54,7 @@ export function PetSprite(props: PetSpriteProps): React.JSX.Element {
   const { animatedStyle } = useSpriteAnimation(animation);
 
   const stage = spriteKeyToStage(sprite);
-  const primary = PRIMARY_EMOJI[stage];
-  const overlay = MOOD_OVERLAY[mood];
+  const asset = lookupSprite(sprite, mood);
 
   return (
     <View
@@ -72,12 +73,26 @@ export function PetSprite(props: PetSpriteProps): React.JSX.Element {
       }}
     >
       <Animated.View style={animatedStyle as unknown as StyleProp<ViewStyle>}>
-        <View style={{ alignItems: 'center', justifyContent: 'center' }}>
-          <Text style={{ fontSize: 120 }}>{primary}</Text>
-          {overlay !== null && (
-            <Text style={{ fontSize: 28, marginTop: 4, opacity: 0.85 }}>{overlay}</Text>
-          )}
-        </View>
+        {asset !== null ? (
+          <ExpoImage
+            source={asset.source}
+            contentFit="contain"
+            style={{ width: IMAGE_SIZE, height: IMAGE_SIZE }}
+            testID="pet-sprite-image"
+          />
+        ) : (
+          <View
+            testID="pet-sprite-emoji"
+            style={{ alignItems: 'center', justifyContent: 'center' }}
+          >
+            <Text style={{ fontSize: 120 }}>{PRIMARY_EMOJI[stage]}</Text>
+            {MOOD_OVERLAY[mood] !== null && (
+              <Text style={{ fontSize: 28, marginTop: 4, opacity: 0.85 }}>
+                {MOOD_OVERLAY[mood]}
+              </Text>
+            )}
+          </View>
+        )}
       </Animated.View>
     </View>
   );

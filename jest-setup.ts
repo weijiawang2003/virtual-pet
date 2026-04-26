@@ -4,6 +4,17 @@
 // Silence Reanimated v3+ warnings in tests (we don't render any animated views).
 jest.mock('react-native-reanimated', () => jest.requireActual('react-native-reanimated/mock'));
 
+// expo-image is a native module (Nitro/Fabric); shim to a plain View so the
+// renderer can compose layouts without booting RN. testID + style pass through.
+jest.mock('expo-image', () => {
+  const React = jest.requireActual('react');
+  const { View } = jest.requireActual('react-native');
+  return {
+    Image: (props: { testID?: string }) => React.createElement(View, props),
+    ImageBackground: (props: { testID?: string }) => React.createElement(View, props),
+  };
+});
+
 // expo-haptics is pure JS but exports types that touch native; stub it so the
 // hook tests can verify the call shape without booting RN.
 jest.mock('expo-haptics', () => ({
