@@ -13,7 +13,7 @@
       "bundleIdentifier": "com.placeholder.virtualpet",
       "supportsTablet": false
     },
-    "plugins": ["expo-router", "expo-audio", "expo-asset"],
+    "plugins": ["expo-router", "expo-audio", "expo-asset", "@kingstinct/react-native-healthkit"],
     "experiments": {
       "typedRoutes": true
     },

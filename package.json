@@ -18,6 +18,7 @@
     "android": "expo run:android"
   },
   "dependencies": {
+    "@kingstinct/react-native-healthkit": "14.0.0",
     "expo": "54.0.33",
     "expo-asset": "12.0.12",
     "expo-audio": "1.1.1",
@@ -32,6 +33,7 @@
     "expo-splash-screen": "31.0.13",
     "expo-status-bar": "3.0.9",
     "expo-system-ui": "6.0.9",
+    "expo-task-manager": "14.0.9",
     "lunisolar": "2.6.0",
     "react": "19.1.0",
     "react-dom": "19.1.0",
