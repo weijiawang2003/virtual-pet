@@ -18,8 +18,8 @@ export default function TabsLayout(): React.JSX.Element {
     <NativeTabs>
       <NativeTabs.Trigger name="index" options={{ title: 'Home', icon: { sf: 'house.fill' } }} />
       <NativeTabs.Trigger
-        name="memory"
-        options={{ title: 'Memory', icon: { sf: 'photo.on.rectangle' } }}
+        name="vault"
+        options={{ title: 'Vault', icon: { sf: 'tray.full.fill' } }}
       />
       <NativeTabs.Trigger
         name="settings"
