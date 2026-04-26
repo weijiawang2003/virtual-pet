@@ -7,6 +7,7 @@ import { createHealthSignalSource } from '../../providers/signals/health-signal-
 import { createLocationSignalSource } from '../../providers/signals/location-signal-source';
 import { createSignalBus, type SignalBus } from '../../providers/signals/signal-bus';
 import { usePetSnapshotStore } from '../store/pet-snapshot-store';
+import { useQuestStore } from '../store/quest-store';
 import { useSettingsStore } from '../store/settings-store';
 import { useVitalityStore } from '../store/vitality-store';
 import { useRuntimeProviders } from './runtime-providers-context';
@@ -57,6 +58,7 @@ export function SignalBusProvider({
         if (delta !== 0) {
           useVitalityStore.getState().recover(delta, vitalitySourceFor(signal.type));
         }
+        useQuestStore.getState().feedSignal(signal);
       },
     } satisfies SignalBus;
   }, []);

@@ -4,17 +4,21 @@ import { ScrollView, StyleSheet, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { t } from '../../core/i18n/t';
+import { getActiveQuest } from '../../core/quest/quest-reducer';
 import { compose } from '../../core/visual/compose';
 import { VITALITY_COSTS } from '../../core/vitality/costs';
 import { ActionButton } from '../components/action-button';
 import { Bubble } from '../components/bubble';
 import { PetSprite } from '../components/pet-sprite';
+import { QuestCard } from '../components/quest-card';
 import { StageBadge } from '../components/stage-badge';
 import { StatRing } from '../components/stat-ring';
 import { VitalityBar } from '../components/vitality-bar';
 import { useLifeContext } from '../hooks/use-life-context';
 import { usePetActions } from '../hooks/use-pet-actions';
+import { useQuestStore } from '../store/quest-store';
 import { useSettingsStore } from '../store/settings-store';
+import { useVaultStore } from '../store/vault-store';
 import { useVitalityStore } from '../store/vitality-store';
 import { useTheme } from '../theme/use-theme';
 
@@ -32,6 +36,27 @@ export function HomeScreen(): React.JSX.Element {
   const onboardingCompleted = useSettingsStore((s) => s.onboardingCompleted);
   const notificationsAskedAt = useSettingsStore((s) => s.notificationsAskedAt);
   const signalsOnboardingShownAt = useSettingsStore((s) => s.signalsOnboardingShownAt);
+  const quests = useQuestStore((s) => s.quests);
+  const offerQuest = useQuestStore((s) => s.offer);
+  const acceptQuest = useQuestStore((s) => s.accept);
+  const declineQuest = useQuestStore((s) => s.decline);
+  const activeVaultPetId = useVaultStore((s) => s.vault.activePetId);
+  const activeQuest = getActiveQuest(quests);
+
+  // Offer one quest on first mount per session if there isn't a live one.
+  useEffect(() => {
+    if (activeQuest !== null) return;
+    offerQuest({
+      petId: activeVaultPetId,
+      vitalityCurrent: vitality.current,
+      hoursSinceLastQuest: null,
+      recentSteps: 2000,
+      recentSleepMinutes: 0,
+      recentNewPlaces: 0,
+    });
+    // Run once after onboarding completes — deps deliberately narrow.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [onboardingCompleted, activeVaultPetId]);
   const [tooltip, setTooltip] = useState<string | null>(null);
 
   const insufficientTooltip =
@@ -94,6 +119,17 @@ export function HomeScreen(): React.JSX.Element {
         </View>
 
         <VitalityBar current={vitality.current} cap={vitality.cap} testID="vitality-bar" />
+
+        {activeQuest !== null && (
+          <View style={{ marginTop: 12 }}>
+            <QuestCard
+              quest={activeQuest}
+              onAccept={() => acceptQuest(activeQuest.id)}
+              onDecline={() => declineQuest(activeQuest.id)}
+              testID="home-quest-card"
+            />
+          </View>
+        )}
 
         <View style={{ alignItems: 'center', justifyContent: 'center', paddingVertical: 32 }}>
           <PetSprite sprite={visual.sprite} mood={visual.mood} animation={visual.animation} />
