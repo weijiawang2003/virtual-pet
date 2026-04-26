@@ -10,6 +10,7 @@ import { useSignalBus } from '../providers/signal-bus-context';
 import { usePetSnapshotStore } from '../store/pet-snapshot-store';
 import { DEMO_SPEED_OPTIONS, useSettingsStore, type DemoSpeed } from '../store/settings-store';
 import { useUserProfileStore } from '../store/user-profile-store';
+import { useEssenceStore } from '../store/essence-store';
 import { useVitalityStore } from '../store/vitality-store';
 import { useTheme } from '../theme/use-theme';
 import type { ThemeMode } from '../theme/types';
@@ -110,6 +111,8 @@ export function SettingsScreen(): React.JSX.Element {
   const vitality = useVitalityStore((s) => s.vitality);
   const recoverVitality = useVitalityStore((s) => s.recover);
   const resetVitality = useVitalityStore((s) => s.reset);
+  const essence = useEssenceStore((s) => s.current);
+  const gainEssence = useEssenceStore((s) => s.gain);
 
   useEffect(() => {
     let cancelled = false;
@@ -296,6 +299,35 @@ export function SettingsScreen(): React.JSX.Element {
               testID="dev-reset-vitality"
             >
               <Text style={{ color: palette.textMuted, fontSize: 12 }}>重置元气 (dev)</Text>
+            </Pressable>
+            <Text
+              style={{
+                color: palette.textMuted,
+                fontSize: 12,
+                paddingHorizontal: 16,
+                paddingTop: 12,
+              }}
+            >
+              本源 {essence}
+            </Text>
+            <Pressable
+              accessibilityRole="button"
+              accessibilityLabel="Force +10 Essence"
+              onPress={() => {
+                haptic.trigger('selection');
+                gainEssence(10);
+              }}
+              style={{
+                marginHorizontal: 16,
+                marginTop: 4,
+                paddingVertical: 10,
+                backgroundColor: palette.surfaceMuted,
+                borderRadius: 10,
+                alignItems: 'center',
+              }}
+              testID="dev-gain-essence"
+            >
+              <Text style={{ color: palette.text, fontSize: 13 }}>+10 本源 (dev)</Text>
             </Pressable>
           </View>
         )}

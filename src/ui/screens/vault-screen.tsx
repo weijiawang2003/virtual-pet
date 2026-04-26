@@ -1,8 +1,10 @@
+import { useState } from 'react';
 import { Alert, FlatList, Pressable, Text, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
 import { getArchetype } from '../../core/vault/archetypes';
 import type { Element, Rarity, VaultedPet } from '../../core/vault/types';
+import { GachaModal } from '../components/gacha-modal';
 import { useHaptics } from '../haptics/use-haptics';
 import { useVaultStore } from '../store/vault-store';
 import { useTheme } from '../theme/use-theme';
@@ -79,6 +81,7 @@ export function VaultScreen(): React.JSX.Element {
   const haptics = useHaptics();
   const vault = useVaultStore((s) => s.vault);
   const setActivePet = useVaultStore((s) => s.setActivePet);
+  const [gachaOpen, setGachaOpen] = useState(false);
 
   const pets: readonly VaultedPet[] = vault.order
     .map((id) => vault.entries[id])
@@ -104,12 +107,40 @@ export function VaultScreen(): React.JSX.Element {
 
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: palette.background }}>
-      <View style={{ paddingHorizontal: 20, paddingTop: 16, paddingBottom: 8 }}>
-        <Text style={{ color: palette.text, fontSize: 22, fontWeight: '700' }}>宠物馆</Text>
-        <Text style={{ color: palette.textMuted, fontSize: 13, marginTop: 4 }}>
-          {pets.length === 0 ? '还没有其他小伙伴呢' : `已收集 ${pets.length} 只`}
-        </Text>
+      <View
+        style={{
+          paddingHorizontal: 20,
+          paddingTop: 16,
+          paddingBottom: 8,
+          flexDirection: 'row',
+          alignItems: 'center',
+        }}
+      >
+        <View style={{ flex: 1 }}>
+          <Text style={{ color: palette.text, fontSize: 22, fontWeight: '700' }}>宠物馆</Text>
+          <Text style={{ color: palette.textMuted, fontSize: 13, marginTop: 4 }}>
+            {pets.length === 0 ? '还没有其他小伙伴呢' : `已收集 ${pets.length} 只`}
+          </Text>
+        </View>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel="召唤"
+          onPress={() => {
+            haptics.trigger('selection');
+            setGachaOpen(true);
+          }}
+          style={{
+            paddingHorizontal: 18,
+            paddingVertical: 10,
+            backgroundColor: palette.accent,
+            borderRadius: 999,
+          }}
+          testID="vault-summon"
+        >
+          <Text style={{ color: '#FFFFFF', fontSize: 14, fontWeight: '700' }}>召唤</Text>
+        </Pressable>
       </View>
+      <GachaModal visible={gachaOpen} onClose={() => setGachaOpen(false)} />
       {pets.length === 0 ? (
         <View
           style={{ flex: 1, alignItems: 'center', justifyContent: 'center', padding: 24 }}
